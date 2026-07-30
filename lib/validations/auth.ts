@@ -8,7 +8,7 @@ const credentialsSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Email is required" })
-    .regex(emailRegex, { message: "Invalid email format" }),
+    .regex(emailRegex, { message: "Invalid email format" }).toLowerCase(),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" })
