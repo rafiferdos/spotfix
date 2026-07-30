@@ -1,10 +1,11 @@
-"use client"; // Fixed the Build Error
+"use client" // Fixed the Build Error
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginFormValues } from "@/lib/validations/auth";
+import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 
-import { Button } from "@/components/ui/button";
+import { AuthForm, FormFieldConfig } from "@/components/shared/AuthForm"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -13,15 +14,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { sileo } from "sileo";
-import { AuthForm, FormFieldConfig } from "@/components/shared/AuthForm";
+} from "@/components/ui/card"
+import { sileo } from "sileo"
 
 export default function LoginPage() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
-  });
+  })
 
   const onSubmit = async (values: LoginFormValues) => {
     await sileo.promise(
@@ -31,8 +31,8 @@ export default function LoginPage() {
         success: { title: "Login successful!" },
         error: { title: "Invalid request." },
       }
-    );
-  };
+    )
+  }
 
   // The dynamic array now perfectly matches your UI requirements
   const loginFields: FormFieldConfig<LoginFormValues>[] = [
@@ -52,10 +52,10 @@ export default function LoginPage() {
         </a>
       ),
     },
-  ];
+  ]
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
@@ -66,12 +66,16 @@ export default function LoginPage() {
             <Button variant="link">Sign Up</Button>
           </CardAction>
         </CardHeader>
-        
+
         <CardContent>
           <AuthForm form={form} onSubmit={onSubmit} fields={loginFields}>
             {/* Passing CardFooter directly into the form via children prop */}
-            <CardFooter className="flex-col gap-2 p-0 mt-6">
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+            <CardFooter className="mt-6 flex-col gap-2 p-0">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.formState.isSubmitting}
+              >
                 {form.formState.isSubmitting ? "Logging in..." : "Login"}
               </Button>
             </CardFooter>
@@ -79,5 +83,5 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
