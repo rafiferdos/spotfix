@@ -98,7 +98,7 @@ export default function RegisterPage() {
           </CardDescription>
           <CardAction>
             <Link href="/login">
-              <Button variant="link">Already have an account? Log In</Button>
+              <Button variant="link">Log In</Button>
             </Link>
           </CardAction>
         </CardHeader>
