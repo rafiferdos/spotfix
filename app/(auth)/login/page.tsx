@@ -1,9 +1,5 @@
 "use client"
 
-import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import Cookies from "js-cookie"
 import { AuthForm, FormFieldConfig } from "@/components/shared/AuthForm"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,19 +11,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
+import { zodResolver } from "@hookform/resolvers/zod"
+import Cookies from "js-cookie"
+import { useForm } from "react-hook-form"
 
+import config from "@/config"
 import { useAuth } from "@/store/use-auth"
 import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { sileo } from "sileo"
-import config from "@/config"
 
 export default function LoginPage() {
   const router = useRouter()
-  
+
   // Fixed: Extracting the login action from Zustand and assigning it to setAuthUser
-  const setAuthUser = useAuth((state) => state.login) 
+  const setAuthUser = useAuth((state) => state.login)
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -37,7 +37,7 @@ export default function LoginPage() {
   const onSubmit = async (values: LoginFormValues) => {
     // Creating the actual API promise
     const loginRequest = axios.post(`${config.apiUrl}/auth/login`, values)
-    
+
     try {
       // Fixed: Passing the actual Axios request into Sileo
       const response = await sileo.promise(loginRequest, {
@@ -45,20 +45,27 @@ export default function LoginPage() {
         success: { title: "Login successful!" },
         error: { title: "Invalid email or password." },
       })
-      
-      const { token, user } = response.data
-      
+
+      const { accessToken, refreshToken } = response.data.data
+
       // Fixed: Using js-cookie and correcting the boolean check
-      Cookies.set("accessToken", token, {
+      Cookies.set("accessToken", accessToken, {
         expires: 7,
-        secure: config.isProduction, 
+        secure: config.isProduction,
       })
-      
-      setAuthUser(user)
+
+      Cookies.set("refreshToken", refreshToken, {
+        expires: 7,
+        secure: config.isProduction,
+      })
+
+      setAuthUser(response.data.data.user)
       router.push("/dashboard")
     } catch (error) {
-      // Sileo already shows the error toast automatically via the promise tracker above.
-      // We just catch the error here to prevent unhandled promise rejections.
+      sileo.error({
+        title: "Login failed",
+        description: "Please check your credentials and try again.",
+      })
       console.error("Authentication failed:", error)
     }
   }
