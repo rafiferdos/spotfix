@@ -1,11 +1,22 @@
 "use client"
 
-import { FormFieldConfig } from "@/components/shared/AuthForm"
+import { AuthForm, FormFieldConfig } from "@/components/shared/AuthForm"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import config from "@/config"
 import { USER_ROLES } from "@/lib/constants"
 import { RegisterFormValues, registerSchema } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { sileo } from "sileo"
@@ -75,4 +86,39 @@ export default function RegisterPage() {
       placeholder: "123 Main St, City, Country",
     },
   ]
+
+  return (
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Join Spotfix</CardTitle>
+          <CardDescription>
+            Create an account to get started with Spotfix. Fill in your details
+            below to register.
+          </CardDescription>
+          <CardAction>
+            <Link href="/login">
+              <Button variant="link">Already have an account? Log In</Button>
+            </Link>
+          </CardAction>
+        </CardHeader>
+
+        <CardContent>
+          <AuthForm form={form} onSubmit={onSubmit} fields={registerFields}>
+            <CardFooter className="mt-6 flex-col gap-2 p-0">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting
+                  ? "Creating account..."
+                  : "Register"}
+              </Button>
+            </CardFooter>
+          </AuthForm>
+        </CardContent>
+      </Card>
+    </div>
+  )
 }
