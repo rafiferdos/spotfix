@@ -1,3 +1,4 @@
+import { useAuth } from "@/store/use-auth"
 import axios from "axios"
 import status from "http-status"
 import { sileo } from "sileo"
@@ -10,17 +11,23 @@ export const axiosInstance = axios.create({
   },
 })
 
-// Interceptor for handling global client-side errors
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === status.UNAUTHORIZED) {
       sileo.error({
-        title: "Unauthorized Access",
-        description:
-          "Your session may have expired. Please log in again to continue.",
+        title: "Session Expired",
+        description: "Your session has expired. Please log in again.",
       })
-      console.error("Unauthorized access - maybe token expired")
+
+      useAuth.getState().logout()
+
+      if (
+        typeof window !== "undefined" &&
+        window.location.pathname !== "/login"
+      ) {
+        window.location.href = "/login"
+      }
     }
     return Promise.reject(error)
   }
