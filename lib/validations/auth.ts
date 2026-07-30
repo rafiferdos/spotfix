@@ -9,7 +9,8 @@ const credentialsSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Email is required" })
-    .regex(emailRegex, { message: "Invalid email format" }).toLowerCase(),
+    .regex(emailRegex, { message: "Invalid email format" })
+    .toLowerCase(),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" })
@@ -25,6 +26,8 @@ export const registerSchema = credentialsSchema.extend({
   role: z.enum([USER_ROLES.CUSTOMER, USER_ROLES.TECHNICIAN, USER_ROLES.ADMIN], {
     message: "Please select a valid role",
   }),
+  phone: z.string().optional(),
+  address: z.string().optional(),
 })
 
 export type LoginFormValues = z.infer<typeof loginSchema>
