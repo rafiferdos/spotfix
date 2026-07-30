@@ -32,7 +32,7 @@ export default function RootLayout({
         outfitHeading.variable
       )}
     >
-      <body>
+      <body suppressHydrationWarning>
         <Toaster position="top-center" theme="system" />
         <ThemeProvider>
           <QueryProvider>{children}</QueryProvider>

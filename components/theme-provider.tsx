@@ -47,7 +47,8 @@ function ThemeHotkey() {
         return
       }
 
-      if (event.key.toLowerCase() !== "d") {
+      // Added optional chaining (?.) to prevent the undefined crash
+      if (event.key?.toLowerCase() !== "d") {
         return
       }
 
@@ -67,5 +68,4 @@ function ThemeHotkey() {
 
   return null
 }
-
 export { ThemeProvider }
