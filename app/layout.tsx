@@ -1,5 +1,6 @@
 import { Geist_Mono, Montserrat, Outfit } from "next/font/google"
 
+import AuthProvider from "@/components/providers/auth-provider"
 import QueryProvider from "@/components/providers/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
@@ -35,7 +36,9 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <Toaster position="top-center" theme="system" />
         <ThemeProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
