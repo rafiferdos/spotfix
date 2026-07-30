@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import Link from "next/link"
 import { sileo } from "sileo"
 
 export default function LoginPage() {
@@ -62,9 +63,11 @@ export default function LoginPage() {
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
-          <CardAction>
-            <Button variant="link">Sign Up</Button>
-          </CardAction>
+            <CardAction>
+          <Link href="/register">
+              <Button variant="link">Sign Up</Button>
+          </Link>
+            </CardAction>
         </CardHeader>
 
         <CardContent>
