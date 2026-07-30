@@ -81,11 +81,12 @@ export default function LoginPage() {
       name: "password",
       label: "Password",
       type: "password",
-      action: (
-        <a href="#" className="text-sm underline-offset-4 hover:underline">
-          Forgot your password?
-        </a>
-      ),
+      placeholder: "********",
+      // action: (
+      //   <a href="#" className="text-sm underline-offset-4 hover:underline">
+      //     Forgot your password?
+      //   </a>
+      // ),
     },
   ]
 
