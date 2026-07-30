@@ -2,6 +2,7 @@
 
 import { jwtVerify } from "jose"
 import { cookies } from "next/headers"
+import { sileo } from "sileo"
 
 /**
  * Gets a new Access Token.
@@ -37,6 +38,11 @@ export const getNewAccessToken = async (tokenFromProxy?: string | null) => {
     const result = await res.json()
     return result
   } catch (error) {
+    sileo.error({
+      title: "Failed to fetch new access token",
+      description:
+        "An error occurred while trying to refresh the access token.",
+    })
     return {
       success: false,
       message: "Failed to fetch new access token",
