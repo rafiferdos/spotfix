@@ -33,7 +33,7 @@ export default function RootLayout({
       )}
     >
       <body>
-        <Toaster position="top-center" />
+        <Toaster position="top-center" theme="system" />
         <ThemeProvider>
           <QueryProvider>{children}</QueryProvider>
         </ThemeProvider>
