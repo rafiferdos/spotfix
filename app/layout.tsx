@@ -1,5 +1,6 @@
 import { Geist_Mono, Montserrat, Outfit } from "next/font/google"
 
+import QueryProvider from "@/components/providers/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Toaster } from "sileo"
@@ -33,7 +34,9 @@ export default function RootLayout({
     >
       <body>
         <Toaster position="top-center" />
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
