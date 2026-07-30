@@ -66,7 +66,6 @@ export default function LoginPage() {
         title: "Login failed",
         description: "Please check your credentials and try again.",
       })
-      console.error("Authentication failed:", error)
     }
   }
 
