@@ -3,8 +3,6 @@ import { USER_ROLES } from "../constants"
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/
-
 const credentialsSchema = z.object({
   email: z
     .string()
@@ -14,9 +12,8 @@ const credentialsSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" })
-    .regex(passwordRegex, {
-      message: "Password needs 1 uppercase, 1 lowercase, and 1 number",
-    }),
+    .max(32, { message: "Password cannot exceed 32 characters" })
+    .regex(/\d/, { message: "Password must contain at least one number" }),
 })
 
 export const loginSchema = credentialsSchema
