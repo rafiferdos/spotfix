@@ -97,9 +97,8 @@ export function AddServiceModal() {
             <Input
               id="price"
               type="number"
-              step="any" // Optional: Allows decimal prices like 15.50
+              step="any"
               placeholder="0.00"
-              // Changed here:
               {...register("price", { valueAsNumber: true })}
             />
             {errors.price && (
