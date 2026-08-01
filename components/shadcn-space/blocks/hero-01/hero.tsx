@@ -35,7 +35,7 @@ function HeroSection({ avatarList }: HeroSectionProps) {
                   transition={{ duration: 1, ease: "easeInOut" }}
                   className="text-5xl leading-14 font-medium md:text-7xl md:leading-20 lg:text-8xl lg:leading-24"
                 >
-                  Your trusted platform for
+                  Your trusted platform for{" "}
                   <span
                     className={`${instrumentSerif.className} tracking-tight text-primary`}
                   >
