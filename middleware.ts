@@ -8,7 +8,6 @@ const PUBLIC_ROUTES = ["/", "/news", "/services"]
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-
   const response = NextResponse.next()
 
   let accessToken = request.cookies.get("accessToken")?.value
@@ -30,7 +29,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 2. Silent Token Refresh (Let the Backend verify the refresh token securely)
+  console.log(accessToken, refreshToken, isTokenValid, userRole, pathname)
+
+  // 2. Silent Token Refresh
   if (!isTokenValid && refreshToken) {
     try {
       const result = await getNewAccessToken(refreshToken)
@@ -38,11 +39,15 @@ export async function middleware(request: NextRequest) {
       if (result?.success && result?.data?.accessToken) {
         const newAccessToken = result.data.accessToken
 
-        response.cookies.set("accessToken", newAccessToken, {
+        // FIX 1: Add path explicitly to ensure global scoping
+        response.cookies.set({
+          name: "accessToken",
+          value: newAccessToken,
           httpOnly: true,
           maxAge: 60 * 60 * 24, // 1 day
           sameSite: "lax",
           secure: process.env.NODE_ENV === "production",
+          path: "/", 
         })
 
         accessToken = newAccessToken
@@ -50,12 +55,10 @@ export async function middleware(request: NextRequest) {
         userRole = payload.role as string
         isTokenValid = true
       } else {
-        // Only delete if backend explicitly says the refresh token is invalid
         response.cookies.delete("accessToken")
         response.cookies.delete("refreshToken")
       }
     } catch (error) {
-      // Network or fetch failure, do not blindly destroy cookies
       console.error("Token refresh failed in proxy:", error)
     }
   }
@@ -67,11 +70,24 @@ export async function middleware(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(route + "/")
   )
 
+  // FIX 2: Securely copy all cookie attributes without destructing them
   const redirectTo = (url: string) => {
     const redirectResponse = NextResponse.redirect(new URL(url, request.url))
+    
     response.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie.name, cookie.value)
+      redirectResponse.cookies.set({
+        name: cookie.name,
+        value: cookie.value,
+        domain: cookie.domain,
+        path: cookie.path ?? "/",
+        httpOnly: cookie.httpOnly,
+        secure: cookie.secure,
+        sameSite: cookie.sameSite,
+        maxAge: cookie.maxAge,
+        expires: cookie.expires
+      })
     })
+    
     return redirectResponse
   }
 
@@ -86,12 +102,9 @@ export async function middleware(request: NextRequest) {
   if (!isTokenValid && !isPublicRoute && !isAuthRoute) {
     const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("redirectTo", pathname)
-
-    const loginRedirectResponse = NextResponse.redirect(loginUrl)
-    response.cookies.getAll().forEach((cookie) => {
-      loginRedirectResponse.cookies.set(cookie.name, cookie.value)
-    })
-    return loginRedirectResponse
+    
+    // FIX 3: Use the helper function here as well to retain cookies during redirection
+    return redirectTo(loginUrl.toString())
   }
 
   // Role-based Access Control (RBAC)
