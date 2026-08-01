@@ -1,13 +1,5 @@
 import { axiosInstance } from "@/lib/axios"
-
-export interface ServiceType {
-  id: string
-  name: string
-  description: string
-  price: number
-  category: string
-  isAvailable: boolean
-}
+import { ServiceType } from "./types"
 
 export const getServices = async (): Promise<ServiceType[]> => {
   const response = await axiosInstance.get("/services")
