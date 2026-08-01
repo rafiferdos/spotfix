@@ -1,4 +1,3 @@
-// proxy.ts
 import { jwtVerify } from "jose"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
@@ -7,7 +6,7 @@ import { getNewAccessToken } from "./service/refresh-token"
 const AUTH_ROUTES = ["/login", "/register"]
 const PUBLIC_ROUTES = ["/", "/news", "/services"]
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   const response = NextResponse.next()
