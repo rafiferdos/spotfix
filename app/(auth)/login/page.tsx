@@ -17,8 +17,8 @@ import Cookies from "js-cookie"
 import { useForm } from "react-hook-form"
 
 import config from "@/config"
+import { axiosInstance } from "@/lib/axios"
 import { useAuth } from "@/store/use-auth"
-import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { sileo } from "sileo"
@@ -36,7 +36,10 @@ export default function LoginPage() {
 
   const onSubmit = async (values: LoginFormValues) => {
     // Creating the actual API promise
-    const loginRequest = axios.post(`${config.apiUrl}/auth/login`, values)
+    const loginRequest = axiosInstance.post(
+      `${config.apiUrl}/auth/login`,
+      values
+    )
 
     try {
       // Fixed: Passing the actual Axios request into Sileo
