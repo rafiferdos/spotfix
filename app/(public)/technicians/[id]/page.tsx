@@ -2,16 +2,20 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Spinner } from "@/components/ui/spinner"
 import { useTechnician } from "@/features/technicians/hooks"
+import axios from "axios"
 import {
   AlertCircle,
+  ArrowLeft,
   Briefcase,
   Calendar,
+  Loader2,
   Mail,
   Phone,
   Star,
+  UserX,
 } from "lucide-react"
+import { motion } from "motion/react"
 import Link from "next/link"
 import { use } from "react"
 
@@ -21,21 +25,45 @@ export default function TechnicianProfilePage({
   params: Promise<{ id: string }>
 }) {
   const { id } = use(params)
-  const { data: technician, isLoading, isError } = useTechnician(id)
+  const { data: technician, isLoading, isError, error } = useTechnician(id)
 
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Spinner />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     )
   }
 
   if (isError || !technician) {
+    const isNotFound =
+      axios.isAxiosError(error) && error.response?.status === 404
+
     return (
-      <div className="flex h-[60vh] flex-col items-center justify-center gap-2 text-destructive">
-        <AlertCircle className="h-8 w-8" />
-        <p>Could not load this technician&apos;s profile.</p>
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-3 text-center">
+        {isNotFound ? (
+          <UserX className="h-10 w-10 text-muted-foreground" />
+        ) : (
+          <AlertCircle className="h-10 w-10 text-destructive" />
+        )}
+        <div>
+          <p className="font-medium">
+            {isNotFound
+              ? "This technician doesn't exist."
+              : "Something went wrong loading this profile."}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {isNotFound
+              ? "They may have been removed or the link is incorrect."
+              : "Please try again in a moment."}
+          </p>
+        </div>
+        <Link href="/technicians">
+          <Button variant="outline" className="mt-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back to technicians
+          </Button>
+        </Link>
       </div>
     )
   }
@@ -58,7 +86,12 @@ export default function TechnicianProfilePage({
     .toUpperCase()
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="mx-auto max-w-5xl px-4 py-12 sm:px-6"
+    >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]">
         <div>
           <div className="flex items-center gap-4">
@@ -98,28 +131,35 @@ export default function TechnicianProfilePage({
               </p>
             )}
             <div className="mt-4 grid gap-4">
-              {reviews.map((review) => (
-                <Card key={review.id}>
-                  <CardContent className="pt-5">
-                    <div className="flex items-center gap-1 text-primary">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < review.rating
-                              ? "fill-primary"
-                              : "fill-transparent"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    {review.comment && (
-                      <p className="mt-2 text-sm text-foreground/90">
-                        {review.comment}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
+              {reviews.map((review, index) => (
+                <motion.div
+                  key={review.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                >
+                  <Card>
+                    <CardContent className="pt-5">
+                      <div className="flex items-center gap-1 text-primary">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${
+                              i < review.rating
+                                ? "fill-primary"
+                                : "fill-transparent"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      {review.comment && (
+                        <p className="mt-2 text-sm text-foreground/90">
+                          {review.comment}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -181,6 +221,6 @@ export default function TechnicianProfilePage({
           </Card>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
