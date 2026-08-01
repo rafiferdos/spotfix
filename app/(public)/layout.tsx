@@ -1,11 +1,12 @@
 import { Geist_Mono, Montserrat, Outfit } from "next/font/google"
 
+import { Footer } from "@/components/footer"
 import AuthProvider from "@/components/providers/auth-provider"
 import QueryProvider from "@/components/providers/query-provider"
+import Navbar from "@/components/shadcn-space/blocks/navbar-01/navbar"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Toaster } from "sileo"
-import Navbar from "@/components/shadcn-space/blocks/navbar-01/navbar"
 
 const outfitHeading = Outfit({ subsets: ["latin"], variable: "--font-heading" })
 
@@ -41,6 +42,7 @@ export default function RootLayout({
             <AuthProvider>{children}</AuthProvider>
           </QueryProvider>
         </ThemeProvider>
+        <Footer />
       </body>
     </html>
   )
