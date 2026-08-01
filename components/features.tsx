@@ -3,6 +3,7 @@
 import { useServices } from "@/features/services/hooks"
 import { ServiceType } from "@/features/services/types"
 import { AlertCircle, Wrench } from "lucide-react"
+import { motion } from "motion/react"
 import { Spinner } from "./ui/spinner"
 
 const Features = () => {
@@ -17,13 +18,28 @@ const Features = () => {
   })
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col px-6 py-20">
-      <h2 className="text-center text-4xl font-medium tracking-[-0.04em] text-pretty sm:text-[2.75rem]">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="mx-auto flex max-w-7xl flex-col px-6 py-20"
+    >
+      <motion.h2
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="text-center text-4xl font-medium tracking-[-0.04em] text-pretty sm:text-[2.75rem]"
+      >
         Featured Services
-      </h2>
-      <p className="mt-3 text-center text-xl tracking-[-0.01em] text-pretty text-muted-foreground sm:text-2xl">
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 32 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="mt-3 text-center text-xl tracking-[-0.01em] text-pretty text-muted-foreground sm:text-2xl"
+      >
         Top-rated professionals ready to help you
-      </p>
+      </motion.p>
 
       {/* Loading State */}
       {isLoading && (
@@ -121,7 +137,7 @@ const Features = () => {
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
 
