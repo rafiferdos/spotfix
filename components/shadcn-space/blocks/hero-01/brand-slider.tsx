@@ -35,20 +35,20 @@ function BrandSlider({ brandList }: { brandList: BrandList[] }) {
                 <Marquee pauseOnHover className="p-0 [--duration:20s]">
                   {brandList.map((brand, index) => (
                     <div key={index}>
-                      <Image
-                        height={32}
-                        width={36}
-                        src={brand.image}
-                        alt={brand.name}
-                        className="mr-6 h-8 w-36 lg:mr-20 dark:hidden"
-                      />
-                      <Image
-                        height={32}
-                        width={36}
-                        src={brand.lightimg}
-                        alt={brand.name}
-                        className="mr-12 hidden h-8 w-36 lg:mr-20 dark:block"
-                      />
+<Image
+  height={32}
+  width={36}
+  src={brand.image}
+  alt={brand.name}
+  className="mr-6 h-8 w-36 lg:mr-20 object-contain dark:hidden"
+/>
+<Image
+  height={32}
+  width={36}
+  src={brand.lightimg}
+  alt={brand.name}
+  className="mr-12 hidden h-8 w-36 lg:mr-20 object-contain dark:block"
+/>
                     </div>
                   ))}
                 </Marquee>
