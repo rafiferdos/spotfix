@@ -13,10 +13,8 @@ import {
 } from "@/components/ui/card"
 import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Cookies from "js-cookie"
 import { useForm } from "react-hook-form"
 
-import config from "@/config"
 import { axiosInstance } from "@/lib/axios"
 import { useAuth } from "@/store/use-auth"
 import Link from "next/link"
@@ -36,10 +34,7 @@ export default function LoginPage() {
 
   const onSubmit = async (values: LoginFormValues) => {
     // Creating the actual API promise
-    const loginRequest = axiosInstance.post(
-      '/auth/login',
-      values
-    )
+    const loginRequest = axiosInstance.post("/auth/login", values)
 
     try {
       // Fixed: Passing the actual Axios request into Sileo
@@ -50,17 +45,6 @@ export default function LoginPage() {
       })
 
       const { accessToken, refreshToken } = response.data.data
-
-      // Fixed: Using js-cookie and correcting the boolean check
-      Cookies.set("accessToken", accessToken, {
-        expires: 7,
-        secure: config.isProduction,
-      })
-
-      Cookies.set("refreshToken", refreshToken, {
-        expires: 7,
-        secure: config.isProduction,
-      })
 
       const user = response.data.data.user
       setAuthUser(user)
