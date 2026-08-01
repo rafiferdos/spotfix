@@ -3,10 +3,8 @@ import BrandSlider, {
 } from "@/components/shadcn-space/blocks/hero-01/brand-slider"
 import type { AvatarList } from "@/components/shadcn-space/blocks/hero-01/hero"
 import HeroSection from "@/components/shadcn-space/blocks/hero-01/hero"
-import config from "@/config"
 
 export default function AgencyHeroSection() {
-  const token = config.logoToken
   const avatarList: AvatarList[] = [
     {
       image: "https://images.shadcnspace.com/assets/profiles/user-1.jpg",
@@ -22,43 +20,38 @@ export default function AgencyHeroSection() {
     },
   ]
 
-const brandList: BrandList[] = [
-  {
-    image: `https://img.logo.dev/urbancompany.com?token=${token}`,
-    lightimg: `https://img.logo.dev/urbancompany.com?token=${token}`,
-    name: "Urban Company",
-  },
-  {
-    image: `https://img.logo.dev/thumbtack.com?token=${token}`,
-    lightimg: `https://img.logo.dev/thumbtack.com?token=${token}`,
-    name: "Thumbtack",
-  },
-  {
-    image: `https://img.logo.dev/angi.com?token=${token}`,
-    lightimg: `https://img.logo.dev/angi.com?token=${token}`,
-    name: "Angi",
-  },
-  {
-    image: `https://img.logo.dev/handy.com?token=${token}`,
-    lightimg: `https://img.logo.dev/handy.com?token=${token}`,
-    name: "Handy",
-  },
-  {
-    image: `https://img.logo.dev/homeserve.com?token=${token}`,
-    lightimg: `https://img.logo.dev/homeserve.com?token=${token}`,
-    name: "HomeServe",
-  },
-  {
-    image: `https://img.logo.dev/taskrabbit.com?token=${token}`,
-    lightimg: `https://img.logo.dev/taskrabbit.com?token=${token}`,
-    name: "Taskrabbit",
-  },
-  {
-    image: `https://img.logo.dev/porch.com?token=${token}`,
-    lightimg: `https://img.logo.dev/porch.com?token=${token}`,
-    name: "Porch",
-  },
-];
+  const brandList: BrandList[] = [
+    {
+      image: "https://images.shadcnspace.com/assets/brand-logo/logoipsum-1.svg",
+      lightimg:
+        "https://images.shadcnspace.com/assets/brand-logo/logoipsum-light-1.svg",
+      name: "Brand 1",
+    },
+    {
+      image: "https://images.shadcnspace.com/assets/brand-logo/logoipsum-2.svg",
+      lightimg:
+        "https://images.shadcnspace.com/assets/brand-logo/logoipsum-light-2.svg",
+      name: "Brand 2",
+    },
+    {
+      image: "https://images.shadcnspace.com/assets/brand-logo/logoipsum-3.svg",
+      lightimg:
+        "https://images.shadcnspace.com/assets/brand-logo/logoipsum-light-3.svg",
+      name: "Brand 3",
+    },
+    {
+      image: "https://images.shadcnspace.com/assets/brand-logo/logoipsum-4.svg",
+      lightimg:
+        "https://images.shadcnspace.com/assets/brand-logo/logoipsum-light-4.svg",
+      name: "Brand 4",
+    },
+    {
+      image: "https://images.shadcnspace.com/assets/brand-logo/logoipsum-5.svg",
+      lightimg:
+        "https://images.shadcnspace.com/assets/brand-logo/logoipsum-light-5.svg",
+      name: "Brand 5",
+    },
+  ]
 
   return (
     <div className="relative">
