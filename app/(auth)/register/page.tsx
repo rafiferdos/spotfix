@@ -37,7 +37,7 @@ export default function RegisterPage() {
   })
 
   const onSubmit = async (values: RegisterFormValues) => {
-    const registerRequest = axios.post(`${config.apiUrl}/auth/register`, values)
+    const registerRequest = axios.post('/auth/register', values)
 
     try {
       const response = await sileo.promise(registerRequest, {

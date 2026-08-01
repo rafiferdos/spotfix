@@ -37,7 +37,7 @@ export default function LoginPage() {
   const onSubmit = async (values: LoginFormValues) => {
     // Creating the actual API promise
     const loginRequest = axiosInstance.post(
-      `${config.apiUrl}/auth/login`,
+      '/auth/login',
       values
     )
 
@@ -62,8 +62,12 @@ export default function LoginPage() {
         secure: config.isProduction,
       })
 
-      setAuthUser(response.data.data.user)
-      router.push("/dashboard")
+      const user = response.data.data.user
+      setAuthUser(user)
+
+      if (user.role === "ADMIN") router.push("/admin")
+      else if (user.role === "TECHNICIAN") router.push("/technician")
+      else router.push("/customer")
     } catch (error) {
       sileo.error({
         title: "Login failed",
