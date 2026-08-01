@@ -1,8 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { AxiosError } from "axios"
 import { sileo } from "sileo"
 import { createService, getServices } from "./api"
 
-export const useServices = (params?: Record<string, any>) => {
+// Backend error response structure
+interface ErrorResponse {
+  message: string
+}
+
+export const useServices = (
+  params?: Record<string, string | number | boolean>
+) => {
   return useQuery({
     queryKey: ["services", params],
     queryFn: () => getServices(params),
@@ -21,12 +29,11 @@ export const useCreateService = () => {
       })
       queryClient.invalidateQueries({ queryKey: ["services"] })
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       sileo.error({
         title: "Error",
         description:
-          error?.response?.data?.message ||
+          error.response?.data?.message ||
           "An error occurred while creating the service.",
       })
     },
