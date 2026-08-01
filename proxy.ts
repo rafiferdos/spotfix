@@ -6,7 +6,7 @@ import { getNewAccessToken } from "./service/refresh-token"
 const AUTH_ROUTES = ["/login", "/register"]
 const PUBLIC_ROUTES = ["/", "/news", "/services"]
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const response = NextResponse.next()
 
@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest) {
           maxAge: 60 * 60 * 24, // 1 day
           sameSite: "lax",
           secure: process.env.NODE_ENV === "production",
-          path: "/", 
+          path: "/",
         })
 
         accessToken = newAccessToken
@@ -73,7 +73,7 @@ export async function middleware(request: NextRequest) {
   // FIX 2: Securely copy all cookie attributes without destructing them
   const redirectTo = (url: string) => {
     const redirectResponse = NextResponse.redirect(new URL(url, request.url))
-    
+
     response.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set({
         name: cookie.name,
@@ -84,10 +84,10 @@ export async function middleware(request: NextRequest) {
         secure: cookie.secure,
         sameSite: cookie.sameSite,
         maxAge: cookie.maxAge,
-        expires: cookie.expires
+        expires: cookie.expires,
       })
     })
-    
+
     return redirectResponse
   }
 
@@ -102,7 +102,7 @@ export async function middleware(request: NextRequest) {
   if (!isTokenValid && !isPublicRoute && !isAuthRoute) {
     const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("redirectTo", pathname)
-    
+
     // FIX 3: Use the helper function here as well to retain cookies during redirection
     return redirectTo(loginUrl.toString())
   }
