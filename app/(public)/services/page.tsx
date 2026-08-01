@@ -21,55 +21,84 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import { useCategories } from "@/features/categories/hooks"
 import { useServices } from "@/features/services/hooks"
-import { AlertCircle, Loader2, Search, Wrench } from "lucide-react"
+import { useDebouncedValue } from "@/hooks/useDebouncedValue"
+import { AlertCircle, Search, Wrench } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
+import { Controller, useForm } from "react-hook-form"
 
 const RATING_OPTIONS = ["5", "4", "3", "2", "1"]
 
+interface ServicesFilterForm {
+  search: string
+  categoryId: string
+  location: string
+  rating: string
+}
+
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06 } },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: "easeOut" as const },
+  },
+}
+
 export default function ServicesPage() {
-  const [search, setSearch] = useState("")
-  const [categoryId, setCategoryId] = useState("")
-  const [location, setLocation] = useState("")
-  const [rating, setRating] = useState("")
+  const { control, register, watch, reset } = useForm<ServicesFilterForm>({
+    defaultValues: { search: "", categoryId: "", location: "", rating: "" },
+  })
 
   const { data: categories } = useCategories()
 
+  const search = watch("search")
+  const categoryId = watch("categoryId")
+  const location = watch("location")
+  const rating = watch("rating")
+
+  const debouncedSearch = useDebouncedValue(search, 400)
+  const debouncedLocation = useDebouncedValue(location, 400)
+
   const params = useMemo(() => {
     const p: Record<string, string | number> = {}
-    if (search.trim()) p.search = search.trim()
+    if (debouncedSearch.trim()) p.search = debouncedSearch.trim()
     if (categoryId) p.categoryId = categoryId
-    if (location.trim()) p.location = location.trim()
+    if (debouncedLocation.trim()) p.location = debouncedLocation.trim()
     if (rating) p.rating = Number(rating)
     return p
-  }, [search, categoryId, location, rating])
+  }, [debouncedSearch, categoryId, debouncedLocation, rating])
 
   const { data: services, isLoading, isError } = useServices(params)
 
-  const resetFilters = () => {
-    setSearch("")
-    setCategoryId("")
-    setLocation("")
-    setRating("")
-  }
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-      <div className="mb-10">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mb-10"
+      >
         <h1 className="text-3xl font-medium tracking-[-0.03em] sm:text-4xl">
           Browse Services
         </h1>
         <p className="mt-2 text-muted-foreground">
           Find the right professional for the job.
         </p>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
         {/* Filters */}
         <aside className="h-fit rounded-2xl border bg-card p-5">
           <div className="flex items-center justify-between">
             <h2 className="font-medium">Filters</h2>
-            <Button variant="ghost" size="sm" onClick={resetFilters}>
+            <Button variant="ghost" size="sm" onClick={() => reset()}>
               Reset
             </Button>
           </div>
@@ -82,26 +111,38 @@ export default function ServicesPage() {
                 id="search"
                 placeholder="e.g. AC repair"
                 className="pl-8"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                {...register("search")}
               />
             </div>
           </div>
 
           <div className="mt-5 grid gap-2">
             <Label htmlFor="category">Category</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger id="category" className="w-full">
-                <SelectValue placeholder="All categories" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories?.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Controller
+              control={control}
+              name="categoryId"
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value ?? "")}
+                >
+                  <SelectTrigger id="category" className="w-full">
+                    <SelectValue placeholder="All categories">
+                      {field.value
+                        ? categories?.find((c) => c.id === field.value)?.name
+                        : undefined}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories?.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
 
           <div className="mt-5 grid gap-2">
@@ -109,25 +150,35 @@ export default function ServicesPage() {
             <Input
               id="location"
               placeholder="e.g. Dhanmondi"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              {...register("location")}
             />
           </div>
 
           <div className="mt-5 grid gap-2">
             <Label htmlFor="rating">Minimum rating</Label>
-            <Select value={rating} onValueChange={setRating}>
-              <SelectTrigger id="rating" className="w-full">
-                <SelectValue placeholder="Any rating" />
-              </SelectTrigger>
-              <SelectContent>
-                {RATING_OPTIONS.map((r) => (
-                  <SelectItem key={r} value={r}>
-                    {r}+ stars
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Controller
+              control={control}
+              name="rating"
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value ?? "")}
+                >
+                  <SelectTrigger id="rating" className="w-full">
+                    <SelectValue placeholder="Any rating">
+                      {field.value ? `${field.value}+ stars` : undefined}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {RATING_OPTIONS.map((r) => (
+                      <SelectItem key={r} value={r}>
+                        {r}+ stars
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
         </aside>
 
@@ -142,7 +193,7 @@ export default function ServicesPage() {
           {isError && (
             <div className="flex h-60 items-center justify-center text-destructive">
               <AlertCircle className="mr-2 h-6 w-6" />
-              <p>Failed to load services.</p>
+              <p>Failed to load services. Please try again.</p>
             </div>
           )}
 
@@ -154,42 +205,58 @@ export default function ServicesPage() {
           )}
 
           {!isLoading && !isError && services && services.length > 0 && (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {services.map((service) => (
-                <Card key={service.id} className="flex flex-col">
-                  <CardHeader>
-                    <CardTitle>{service.title}</CardTitle>
-                    <CardDescription className="line-clamp-2">
-                      {service.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
-                        {service.category.name}
-                      </span>
-                      <span className="font-medium text-primary">
-                        ৳{service.price}
-                      </span>
-                    </div>
-                    <p className="mt-3 text-sm text-muted-foreground">
-                      By {service.technician.name}
-                      {service.technician.address
-                        ? ` · ${service.technician.address}`
-                        : ""}
-                    </p>
-                  </CardContent>
-                  <CardFooter>
-                    <Link
-                      href={`/technicians/${service.technicianId}`}
-                      className="w-full"
-                    >
-                      <Button className="w-full">View Technician</Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
+            >
+              <AnimatePresence mode="popLayout">
+                {services.map((service) => (
+                  <motion.div
+                    key={service.id}
+                    layout
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="show"
+                    exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
+                  >
+                    <Card className="flex h-full flex-col">
+                      <CardHeader>
+                        <CardTitle>{service.title}</CardTitle>
+                        <CardDescription className="line-clamp-2">
+                          {service.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex-1">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
+                            {service.category.name}
+                          </span>
+                          <span className="font-medium text-primary">
+                            ৳{service.price}
+                          </span>
+                        </div>
+                        <p className="mt-3 text-sm text-muted-foreground">
+                          By {service.technician.name}
+                          {service.technician.address
+                            ? ` · ${service.technician.address}`
+                            : ""}
+                        </p>
+                      </CardContent>
+                      <CardFooter>
+                        <Link
+                          href={`/technicians/${service.technicianId}`}
+                          className="w-full"
+                        >
+                          <Button className="w-full">View Technician</Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           )}
         </div>
       </div>
