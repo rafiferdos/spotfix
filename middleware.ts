@@ -77,10 +77,9 @@ export async function middleware(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages
   if (isTokenValid && isAuthRoute) {
-    if (userRole === "ADMIN") {
-      return redirectTo("/admin-dashboard")
-    }
-    return redirectTo("/dashboard")
+    if (userRole === "ADMIN") return redirectTo("/admin")
+    if (userRole === "TECHNICIAN") return redirectTo("/technician")
+    return redirectTo("/customer")
   }
 
   // Protect private routes
