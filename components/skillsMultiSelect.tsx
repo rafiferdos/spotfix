@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -50,23 +51,25 @@ export function SkillsMultiSelect({
           <span className="truncate">{triggerLabel}</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="max-h-72 w-(--anchor-width) overflow-y-auto">
-          <DropdownMenuLabel>Filter by skill</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {options.map((skill) => (
-            <DropdownMenuCheckboxItem
-              key={skill}
-              checked={selected.includes(skill)}
-              onCheckedChange={(checked) => toggleSkill(skill, !!checked)}
-              onSelect={(e) => e.preventDefault()}
-            >
-              {skill}
-            </DropdownMenuCheckboxItem>
-          ))}
-          {options.length === 0 && (
-            <p className="px-2 py-3 text-center text-xs text-muted-foreground">
-              No skills available yet
-            </p>
-          )}
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Filter by skill</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {options.map((skill) => (
+              <DropdownMenuCheckboxItem
+                key={skill}
+                checked={selected.includes(skill)}
+                onCheckedChange={(checked) => toggleSkill(skill, !!checked)}
+                onSelect={(e) => e.preventDefault()}
+              >
+                {skill}
+              </DropdownMenuCheckboxItem>
+            ))}
+            {options.length === 0 && (
+              <p className="px-2 py-3 text-center text-xs text-muted-foreground">
+                No skills available yet
+              </p>
+            )}
+          </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
 
