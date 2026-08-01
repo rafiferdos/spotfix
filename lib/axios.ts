@@ -14,7 +14,9 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === status.UNAUTHORIZED) {
+    const isMeCheck = error.config?.url?.includes("/auth/me")
+
+    if (error.response?.status === status.UNAUTHORIZED && !isMeCheck) {
       sileo.error({
         title: "Session Expired",
         description: "Your session has expired. Please log in again.",
