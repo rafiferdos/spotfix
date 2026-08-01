@@ -1,10 +1,11 @@
+import config from "@/config"
 import { useAuth } from "@/store/use-auth"
 import axios from "axios"
 import status from "http-status"
 import { sileo } from "sileo"
 
 export const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: config.apiUrl,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

@@ -5,6 +5,7 @@ export const getServices = async (
   params?: Record<string, string | number | boolean>
 ): Promise<ServiceType[]> => {
   const response = await axiosInstance.get("/services", { params })
+  console.log("response is ", response)
   return response.data.data
 }
 

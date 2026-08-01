@@ -1,127 +1,127 @@
-import {
-  Cable,
-  Code,
-  Contrast,
-  MonitorSmartphone,
-  SquareDashedMousePointer,
-  Zap,
-} from "lucide-react";
+"use client"
 
-const features = [
-  {
-    title: "Blazing Fast Performance",
-    description:
-      "Optimized for speed with minimal loading times and instant interactions, ensuring a smooth experience across devices.",
-    icon: Zap,
-  },
-  {
-    title: "Fully Customizable",
-    description:
-      "Tailor every component to match your brand or workflow — with built-in support for themes, layouts, and configurations.",
-    icon: SquareDashedMousePointer,
-  },
-  {
-    title: "Developer-Friendly",
-    description:
-      "Built with clean, modern code and best practices in mind, making it easy to integrate, extend, and scale.",
-    icon: Code,
-  },
-  {
-    title: "Responsive by Default",
-    description:
-      "Every component is designed to look great on all screen sizes — no extra work needed to make things mobile-friendly.",
-    icon: MonitorSmartphone,
-  },
-  {
-    title: "Accessible for Everyone",
-    description:
-      "Built with accessibility best practices in mind to ensure an inclusive experience for all users, regardless of ability.",
-    icon: Contrast,
-  },
-  {
-    title: "Seamless Integration",
-    description:
-      "Easily connect with your favorite tools, APIs, and services — whether it's authentication, databases, or third-party libraries.",
-    icon: Cable,
-  },
-];
+import { useServices } from "@/features/services/hooks"
+import { ServiceType } from "@/features/services/types"
+import { AlertCircle, Loader2, Wrench } from "lucide-react"
 
 const Features = () => {
+  // Fetching top-rated services with query parameters
+  const {
+    data: services,
+    isLoading,
+    isError,
+  } = useServices({
+    rating: 5,
+    limit: 6,
+  })
+
   return (
     <div className="mx-auto flex max-w-7xl flex-col px-6 py-20">
-      <h2 className="text-pretty text-center font-medium text-4xl tracking-[-0.04em] sm:text-[2.75rem]">
-        Engineered for speed
+      <h2 className="text-center text-4xl font-medium tracking-[-0.04em] text-pretty sm:text-[2.75rem]">
+        Featured Services
       </h2>
-      <p className="mt-3 text-pretty text-center text-muted-foreground text-xl -tracking-[0.01em] sm:text-2xl">
-        Designed for speed, flexibility, and ease of use
+      <p className="mt-3 text-center text-xl tracking-[-0.01em] text-pretty text-muted-foreground sm:text-2xl">
+        Top-rated professionals ready to help you
       </p>
 
-      <div className="mt-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map((feature, index) => (
-          <div
-            className="relative overflow-hidden rounded-xl border bg-card p-6 dark:border-card-foreground/7"
-            key={index}
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/5 text-primary dark:bg-primary/10">
-              <feature.icon />
-            </div>
-            <h3 className="mt-5 font-medium text-lg tracking-[-0.005em]">
-              {feature.title}
-            </h3>
-            <p className="mt-2 text-foreground/80">{feature.description}</p>
+      {/* Loading State */}
+      {isLoading && (
+        <div className="mt-20 flex h-40 items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      )}
 
+      {/* Error State */}
+      {isError && (
+        <div className="mt-20 flex h-40 items-center justify-center text-destructive">
+          <AlertCircle className="mr-2 h-6 w-6" />
+          <p>Failed to load featured services.</p>
+        </div>
+      )}
+
+      {/* Data Grid */}
+      {!isLoading && !isError && (
+        <div className="mt-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {services?.map((service: ServiceType) => (
             <div
-              className="absolute inset-0 -top-px z-0"
-              style={{
-                backgroundImage: `
-        linear-gradient(to right, var(--border) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--border) 1px, transparent 1px)
-      `,
-                backgroundSize: "20px 20px",
-                backgroundPosition: "0 0, 0 0",
-                maskImage: `
-          repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            radial-gradient(ellipse 100% 80% at 100% 0%, #000 50%, transparent 100%)
-      `,
-                WebkitMaskImage: `
-    repeating-linear-gradient(
-              to right,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            repeating-linear-gradient(
-              to bottom,
-              black 0px,
-              black 3px,
-              transparent 3px,
-              transparent 8px
-            ),
-            radial-gradient(ellipse 80% 80% at 100% 0%, #000 50%, transparent 90%)
-      `,
-                maskComposite: "intersect",
-                WebkitMaskComposite: "source-in",
-              }}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+              className="relative flex flex-col overflow-hidden rounded-xl border bg-card p-6 dark:border-card-foreground/7"
+              key={service.id}
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary dark:bg-primary/10">
+                <Wrench className="h-5 w-5" />
+              </div>
 
-export default Features;
+              <div className="flex-1">
+                <h3 className="mt-5 line-clamp-1 text-lg font-medium tracking-[-0.005em]">
+                  {service.title}
+                </h3>
+                <p className="mt-2 line-clamp-2 text-foreground/80">
+                  {service.description}
+                </p>
+              </div>
+
+              {/* Added Price & Category for Marketplace context */}
+              <div className="z-10 mt-6 flex items-center justify-between border-t pt-4 text-sm font-medium dark:border-card-foreground/10">
+                <span className="text-base text-primary">৳{service.price}</span>
+                <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
+                  {service.category.name}
+                </span>
+              </div>
+
+              {/* Background Masking - Preserved Exactly */}
+              <div
+                className="pointer-events-none absolute inset-0 -top-px z-0"
+                style={{
+                  backgroundImage: `
+          linear-gradient(to right, var(--border) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--border) 1px, transparent 1px)
+        `,
+                  backgroundSize: "20px 20px",
+                  backgroundPosition: "0 0, 0 0",
+                  maskImage: `
+            repeating-linear-gradient(
+                to right,
+                black 0px,
+                black 3px,
+                transparent 3px,
+                transparent 8px
+              ),
+              repeating-linear-gradient(
+                to bottom,
+                black 0px,
+                black 3px,
+                transparent 3px,
+                transparent 8px
+              ),
+              radial-gradient(ellipse 100% 80% at 100% 0%, #000 50%, transparent 100%)
+        `,
+                  WebkitMaskImage: `
+      repeating-linear-gradient(
+                to right,
+                black 0px,
+                black 3px,
+                transparent 3px,
+                transparent 8px
+              ),
+              repeating-linear-gradient(
+                to bottom,
+                black 0px,
+                black 3px,
+                transparent 3px,
+                transparent 8px
+              ),
+              radial-gradient(ellipse 80% 80% at 100% 0%, #000 50%, transparent 90%)
+        `,
+                  maskComposite: "intersect",
+                  WebkitMaskComposite: "source-in",
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default Features
