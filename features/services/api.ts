@@ -1,13 +1,14 @@
 import { axiosInstance } from "@/lib/axios"
-import { ServiceType } from "./types"
+import { CreateServicePayload, ServiceType } from "./types"
 
 export const getServices = async (
-  params?: Record<string, any>
+  params?: Record<string, string | number | boolean>
 ): Promise<ServiceType[]> => {
   const response = await axiosInstance.get("/services", { params })
   return response.data.data
 }
-export const createService = async (paylaod: Omit<ServiceType, "id">) => {
-  const response = await axiosInstance.post("/services", paylaod)
+
+export const createService = async (payload: CreateServicePayload) => {
+  const response = await axiosInstance.post("/services", payload)
   return response.data.data
 }
