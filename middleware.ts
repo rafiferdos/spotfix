@@ -96,7 +96,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Role-based Access Control (RBAC)
-  if (pathname.startsWith("/dashboard") && userRole !== "USER") {
+  if (pathname.startsWith("/dashboard") && userRole !== "CUSTOMER") {
     return redirectTo("/not-found")
   }
   if (pathname.startsWith("/admin-dashboard") && userRole !== "ADMIN") {
