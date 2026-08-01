@@ -98,7 +98,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/dashboard") && userRole !== "CUSTOMER") {
     return redirectTo("/not-found")
   }
-  if (pathname.startsWith("/admin-dashboard") && userRole !== "ADMIN") {
+  if (pathname.startsWith("/admin") && userRole !== "ADMIN") {
     return redirectTo("/not-found")
   }
 
