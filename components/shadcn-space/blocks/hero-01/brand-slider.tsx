@@ -25,7 +25,7 @@ function BrandSlider({ brandList }: { brandList: BrandList[] }) {
               <div className="flex items-center justify-center gap-4">
                 <div className="hidden h-0.5 w-40 bg-linear-to-l from-muted-foreground to-white opacity-20 md:block dark:from-muted-foreground dark:to-transparent" />
                 <p className="px-10 text-center text-sm font-normal text-muted-foreground sm:px-2">
-                  Loved by 100+ big and small brands around the worlds
+                  Loved by 100+ big and small brands around the world
                 </p>
                 <div className="hidden h-0.5 w-40 bg-linear-to-r from-muted-foreground to-white opacity-20 md:block dark:from-muted-foreground dark:to-transparent" />
               </div>
