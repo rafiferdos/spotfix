@@ -2,7 +2,8 @@
 
 import { useServices } from "@/features/services/hooks"
 import { ServiceType } from "@/features/services/types"
-import { AlertCircle, Loader2, Wrench } from "lucide-react"
+import { AlertCircle, Wrench } from "lucide-react"
+import { Spinner } from "./ui/spinner"
 
 const Features = () => {
   // Fetching top-rated services with query parameters
@@ -27,7 +28,7 @@ const Features = () => {
       {/* Loading State */}
       {isLoading && (
         <div className="mt-20 flex h-40 items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Spinner />
         </div>
       )}
 
