@@ -1,7 +1,7 @@
 "use client"
 
+import { axiosInstance } from "@/lib/axios"
 import { useAuth } from "@/store/use-auth"
-import axios from "axios"
 import { useEffect } from "react"
 
 export default function AuthProvider({
@@ -14,7 +14,7 @@ export default function AuthProvider({
   useEffect(() => {
     const hydrateUser = async () => {
       try {
-        const response = await axios.get("/auth/me")
+        const response = await axiosInstance.get("/auth/me")
 
         if (response.data.success && response.data.data) {
           login(response.data.data)
