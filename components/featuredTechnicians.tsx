@@ -2,7 +2,8 @@
 
 import { TechnicianCard } from "@/components/technicianCard"
 import { useTechnicians } from "@/features/technicians/hooks"
-import { AlertCircle, Loader2 } from "lucide-react"
+import { AlertCircle } from "lucide-react"
+import { Spinner } from "./ui/spinner"
 
 const FeaturedTechnicians = () => {
   const {
@@ -26,7 +27,7 @@ const FeaturedTechnicians = () => {
 
       {isLoading && (
         <div className="mt-20 flex h-40 items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Spinner />
         </div>
       )}
 
