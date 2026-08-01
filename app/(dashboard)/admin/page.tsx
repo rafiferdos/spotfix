@@ -1,6 +1,5 @@
 "use client"
 
-import { useServices } from "@/hooks/use-services"
 import {
   Table,
   TableBody,
@@ -10,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { AddServiceModal } from "./_components/addServiceModal"
+import { useServices } from "@/features/services/hooks"
 
 export default function AdminDashboardPage() {
   // Fetching data using the React Query hook we discussed earlier
@@ -53,7 +53,7 @@ export default function AdminDashboardPage() {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               services.map((service: any) => (
                 <TableRow key={service.id}>
-                  <TableCell className="font-medium">{service.name}</TableCell>
+                  <TableCell className="font-medium">{service.title}</TableCell>
                   <TableCell className="max-w-xs truncate text-muted-foreground">
                     {service.description}
                   </TableCell>
