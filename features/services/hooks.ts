@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { sileo } from "sileo"
 import { createService, getServices } from "./api"
 
-export const useServices = () => {
+export const useServices = (params?: Record<string, any>) => {
   return useQuery({
-    queryKey: ["services"],
-    queryFn: getServices,
+    queryKey: ["services", params],
+    queryFn: () => getServices(params),
   })
 }
 
