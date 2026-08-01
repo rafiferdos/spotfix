@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 import { getNewAccessToken } from "./service/refresh-token"
 
 const AUTH_ROUTES = ["/login", "/register"]
-const PUBLIC_ROUTES = ["/", "/news", "/services"]
+const PUBLIC_ROUTES = ["/", "/services", "/technicians"]
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
