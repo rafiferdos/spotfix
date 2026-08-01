@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
-import { useServices } from "@/hooks/use-services"
+import { useServices } from "@/features/services/hooks"
 
 export default function CustomerDashboard() {
   const { data: services, isLoading, isError } = useServices()
