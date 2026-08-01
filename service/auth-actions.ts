@@ -18,7 +18,7 @@ export const getMe = async () => {
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`, // Adjust based on your backend expectation
       },
