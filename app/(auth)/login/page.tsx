@@ -15,7 +15,7 @@ import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { axiosInstance } from "@/lib/axios"
+import { loginAction } from "@/service/auth-actions"
 import { useAuth } from "@/store/use-auth"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -33,20 +33,16 @@ export default function LoginPage() {
   })
 
   const onSubmit = async (values: LoginFormValues) => {
-    // Creating the actual API promise
-    const loginRequest = axiosInstance.post("/auth/login", values)
+    const loginRequest = loginAction(values.email, values.password)
 
     try {
-      // Fixed: Passing the actual Axios request into Sileo
       const response = await sileo.promise(loginRequest, {
         loading: { title: "Verifying credentials..." },
         success: { title: "Login successful!" },
         error: { title: "Invalid email or password." },
       })
 
-      const { accessToken, refreshToken } = response.data.data
-
-      const user = response.data.data.user
+      const user = response.data.user
       setAuthUser(user)
 
       if (user.role === "ADMIN") router.push("/admin")

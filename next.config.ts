@@ -1,5 +1,14 @@
 import type { NextConfig } from "next"
 
-const nextConfig: NextConfig = {}
+const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://spotfix-api.vercel.app/api/:path*",
+      },
+    ]
+  },
+}
 
 export default nextConfig
