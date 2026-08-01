@@ -17,7 +17,7 @@ const FeaturedServices = () => {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
               className="mx-auto w-fit gap-8"
             >
               <Link href="/services" passHref>
