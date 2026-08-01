@@ -3,6 +3,7 @@
 import { TechnicianCard } from "@/components/technicianCard"
 import { useTechnicians } from "@/features/technicians/hooks"
 import { AlertCircle } from "lucide-react"
+import { motion } from "motion/react"
 import { Spinner } from "./ui/spinner"
 
 const FeaturedTechnicians = () => {
@@ -17,13 +18,28 @@ const FeaturedTechnicians = () => {
   const topTechnicians = technicians?.slice(0, 6)
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col px-6 py-20">
-      <h2 className="text-center text-4xl font-medium tracking-[-0.04em] text-pretty sm:text-[2.75rem]">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="mx-auto flex max-w-7xl flex-col px-6 py-20"
+    >
+      <motion.h2
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-center text-4xl font-medium tracking-[-0.04em] text-pretty sm:text-[2.75rem]"
+      >
         Top Rated Technicians
-      </h2>
-      <p className="mt-3 text-center text-xl tracking-[-0.01em] text-pretty text-muted-foreground sm:text-2xl">
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 32 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="mt-3 text-center text-xl tracking-[-0.01em] text-pretty text-muted-foreground sm:text-2xl"
+      >
         Verified professionals our customers love
-      </p>
+      </motion.p>
 
       {isLoading && (
         <div className="mt-20 flex h-40 items-center justify-center">
@@ -54,7 +70,7 @@ const FeaturedTechnicians = () => {
             ))}
           </div>
         )}
-    </div>
+    </motion.div>
   )
 }
 
