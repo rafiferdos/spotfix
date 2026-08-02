@@ -1,3 +1,4 @@
+// components/footer.tsx
 "use client"
 import Logo from "@/assets/logo/logo"
 import { FacebookIcon } from "@/components/icons/facebook-icon"
@@ -6,71 +7,34 @@ import { LinkedinIcon } from "@/components/icons/linkedin-icon"
 import { YoutubeIcon } from "@/components/icons/youtube-icon"
 import { cn } from "@/lib/utils"
 import { motion, useReducedMotion } from "motion/react"
+import Link from "next/link"
 import type { ReactNode } from "react"
-// import { Logo } from "@/components/logo";
 
-type FooterLink = {
-  title: string
-  href: string
-  icon?: ReactNode
-}
-
-type FooterSection = {
-  label: string
-  links: FooterLink[]
-}
+type FooterLink = { title: string; href: string; icon?: ReactNode }
+type FooterSection = { label: string; links: FooterLink[] }
 
 const footerLinks: FooterSection[] = [
   {
-    label: "Product",
+    label: "Explore",
     links: [
-      { title: "Features", href: "#" },
-      { title: "Pricing", href: "#" },
-      { title: "Testimonials", href: "#" },
-      { title: "Integration", href: "#" },
+      { title: "Browse Services", href: "/services" },
+      { title: "Find Technicians", href: "/technicians" },
     ],
   },
   {
-    label: "Company",
+    label: "Account",
     links: [
-      { title: "FAQs", href: "#" },
-      { title: "About Us", href: "#" },
-      { title: "Privacy Policy", href: "#" },
-      { title: "T&S", href: "#" },
+      { title: "Log In", href: "/login" },
+      { title: "Join Spotfix", href: "/register" },
     ],
   },
   {
-    label: "Resources",
+    label: "Follow Us",
     links: [
-      { title: "Blog", href: "#" },
-      { title: "Changelog", href: "#" },
-      { title: "Brand", href: "#" },
-      { title: "Help", href: "#" },
-    ],
-  },
-  {
-    label: "Social Links",
-    links: [
-      {
-        title: "Facebook",
-        href: "#",
-        icon: <FacebookIcon />,
-      },
-      {
-        title: "Instagram",
-        href: "#",
-        icon: <InstagramIcon />,
-      },
-      {
-        title: "Youtube",
-        href: "#",
-        icon: <YoutubeIcon />,
-      },
-      {
-        title: "LinkedIn",
-        href: "#",
-        icon: <LinkedinIcon />,
-      },
+      { title: "Facebook", href: "#", icon: <FacebookIcon /> },
+      { title: "Instagram", href: "#", icon: <InstagramIcon /> },
+      { title: "Youtube", href: "#", icon: <YoutubeIcon /> },
+      { title: "LinkedIn", href: "#", icon: <LinkedinIcon /> },
     ],
   },
 ]
@@ -84,16 +48,15 @@ export function Footer() {
       )}
     >
       <div className="absolute top-0 right-1/2 left-1/2 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/20 blur" />
-
       <div className="grid w-full gap-8 py-6 md:py-8 lg:grid-cols-3 lg:gap-8">
         <AnimatedContainer className="space-y-4">
           <Logo className="h-4" />
           <p className="mt-8 text-sm text-muted-foreground md:mt-0">
-            Beautify your app with efferd.
+            Book trusted, verified home service professionals in minutes.
           </p>
         </AnimatedContainer>
 
-        <div className="mt-10 grid grid-cols-2 gap-8 md:grid-cols-4 lg:col-span-2 lg:mt-0">
+        <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-2 lg:mt-0">
           {footerLinks.map((section, index) => (
             <AnimatedContainer delay={0.1 + index * 0.1} key={section.label}>
               <div className="mb-10 md:mb-0">
@@ -101,14 +64,13 @@ export function Footer() {
                 <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                   {section.links.map((link) => (
                     <li key={link.title}>
-                      <a
+                      <Link
                         className="inline-flex items-center duration-250 hover:text-foreground [&_svg]:me-1.5 [&_svg]:size-3.5"
                         href={link.href}
-                        key={`${section.label}-${link.title}`}
                       >
                         {link.icon}
                         {link.title}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -120,7 +82,7 @@ export function Footer() {
       <div className="h-px w-full bg-linear-to-r via-border" />
       <div className="flex w-full items-center justify-center py-4">
         <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} All rights reserved
+          &copy; {new Date().getFullYear()} Spotfix. All rights reserved.
         </p>
       </div>
     </footer>
@@ -137,11 +99,7 @@ function AnimatedContainer({
   children: ReactNode
 }) {
   const shouldReduceMotion = useReducedMotion()
-
-  if (shouldReduceMotion) {
-    return children
-  }
-
+  if (shouldReduceMotion) return children
   return (
     <motion.div
       className={className}
