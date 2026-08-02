@@ -24,7 +24,7 @@ export default function CustomerDashboard() {
       {services?.map((service, index) => (
         <Card key={index}>
           <CardHeader>
-            <CardTitle>{service.name}</CardTitle>
+            <CardTitle>{service.title}</CardTitle>
             <CardDescription>{service.description}</CardDescription>
             <CardAction>
               <Button>Book Now</Button>
