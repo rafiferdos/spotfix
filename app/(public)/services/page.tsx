@@ -1,5 +1,6 @@
 "use client"
 
+import { BookServiceDialog } from "@/components/book-service-dialog"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -22,6 +23,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { useCategories } from "@/features/categories/hooks"
 import { useServices } from "@/features/services/hooks"
 import { useDebouncedValue } from "@/hooks/useDebouncedValue"
+import { useAuth } from "@/store/use-auth"
 import { AlertCircle, Search, Wrench } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
@@ -52,6 +54,7 @@ const itemVariants = {
 }
 
 export default function ServicesPage() {
+  const { user } = useAuth()
   const { control, register, watch, reset } = useForm<ServicesFilterForm>({
     defaultValues: { search: "", categoryId: "", location: "", rating: "" },
   })
@@ -244,13 +247,32 @@ export default function ServicesPage() {
                             : ""}
                         </p>
                       </CardContent>
-                      <CardFooter>
+                      <CardFooter className="flex gap-2">
                         <Link
                           href={`/technicians/${service.technicianId}`}
-                          className="w-full"
+                          className="flex-1"
                         >
-                          <Button className="w-full">View Technician</Button>
+                          <Button variant="outline" className="w-full">
+                            View Technician
+                          </Button>
                         </Link>
+                        {!user ? (
+                          <Link
+                            href="/login?redirectTo=/services"
+                            className="flex-1"
+                          >
+                            <Button className="w-full">Login to Book</Button>
+                          </Link>
+                        ) : user.role === "CUSTOMER" ? (
+                          <BookServiceDialog
+                            technicianId={service.technicianId}
+                            serviceId={service.id}
+                            serviceTitle={service.title}
+                            trigger={
+                              <Button className="w-full">Book Now</Button>
+                            }
+                          />
+                        ) : null}
                       </CardFooter>
                     </Card>
                   </motion.div>
