@@ -1,19 +1,23 @@
 "use client"
 
+import { BookServiceDialog } from "@/components/book-service-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
+import { useServices } from "@/features/services/hooks"
 import { useTechnician } from "@/features/technicians/hooks"
+import { useAuth } from "@/store/use-auth"
 import axios from "axios"
 import {
   AlertCircle,
   ArrowLeft,
   Briefcase,
   Calendar,
-  Loader2,
   Mail,
   Phone,
   Star,
   UserX,
+  Wrench,
 } from "lucide-react"
 import { motion } from "motion/react"
 import Link from "next/link"
@@ -26,11 +30,13 @@ export default function TechnicianProfilePage({
 }) {
   const { id } = use(params)
   const { data: technician, isLoading, isError, error } = useTechnician(id)
+  const { data: allServices } = useServices()
+  const { user } = useAuth()
 
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Spinner />
       </div>
     )
   }
@@ -85,6 +91,8 @@ export default function TechnicianProfilePage({
     .join("")
     .toUpperCase()
 
+  const technicianServices = allServices?.filter((s) => s.technicianId === id)
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -121,6 +129,48 @@ export default function TechnicianProfilePage({
                 {skill}
               </span>
             ))}
+          </div>
+
+          <div id="services" className="mt-8 scroll-mt-24">
+            <h2 className="text-lg font-medium">Services Offered</h2>
+            {(!technicianServices || technicianServices.length === 0) && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                No services listed yet.
+              </p>
+            )}
+            <div className="mt-4 grid gap-4">
+              {technicianServices?.map((service) => (
+                <Card key={service.id}>
+                  <CardContent className="flex items-start justify-between gap-4 pt-5">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Wrench className="h-4 w-4 text-primary" />
+                        <h3 className="font-medium">{service.title}</h3>
+                      </div>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {service.description}
+                      </p>
+                      <p className="mt-2 text-sm font-medium text-primary">
+                        ৳{service.price}
+                      </p>
+                    </div>
+
+                    {!user ? (
+                      <Link href={`/login?redirectTo=/technicians/${id}`}>
+                        <Button variant="outline">Login to Book</Button>
+                      </Link>
+                    ) : user.role === "CUSTOMER" ? (
+                      <BookServiceDialog
+                        technicianId={id}
+                        serviceId={service.id}
+                        serviceTitle={service.title}
+                        trigger={<Button>Book</Button>}
+                      />
+                    ) : null}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
 
           <div className="mt-8">
@@ -214,9 +264,15 @@ export default function TechnicianProfilePage({
                 </div>
               )}
 
-              <Link href={`/login?redirectTo=/technicians/${technician.id}`}>
-                <Button className="mt-2 w-full">Book Now</Button>
-              </Link>
+              {!user ? (
+                <Link href={`/login?redirectTo=/technicians/${id}`}>
+                  <Button className="mt-2 w-full">Login to Book</Button>
+                </Link>
+              ) : user.role === "CUSTOMER" ? (
+                <a href="#services">
+                  <Button className="mt-2 w-full">View Services to Book</Button>
+                </a>
+              ) : null}
             </CardContent>
           </Card>
         </div>
