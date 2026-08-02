@@ -1,7 +1,8 @@
+// components/shadcn-space/blocks/navbar-01/navbar.tsx
 "use client"
 import Logo from "@/assets/logo/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
-import { UserMenu } from "@/components/user-menu"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +16,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
+import { UserMenu } from "@/components/user-menu"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/store/use-auth"
 import { ArrowUpRight, TextAlignJustify } from "lucide-react"
@@ -22,10 +24,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
-export type NavigationSection = {
-  title: string
-  href: string
-}
+export type NavigationSection = { title: string; href: string }
 
 const navigationData: NavigationSection[] = [
   { title: "Home", href: "/" },
@@ -35,6 +34,7 @@ const navigationData: NavigationSection[] = [
 
 const CollaborateButton = ({ className }: { className?: string }) => (
   <Button
+    render={<Link href="/register" />}
     className={cn(
       "group relative h-10 w-fit overflow-hidden rounded-full p-1 ps-4 pe-12 text-sm font-medium transition-all duration-500 hover:bg-primary/80 hover:ps-12 hover:pe-4",
       className
@@ -55,10 +55,7 @@ const Navbar = () => {
   const pathname = usePathname()
   const { user, isLoading } = useAuth()
 
-  const handleScroll = useCallback(() => {
-    setSticky(window.scrollY >= 50)
-  }, [])
-
+  const handleScroll = useCallback(() => setSticky(window.scrollY >= 50), [])
   const handleResize = useCallback(() => {
     if (window.innerWidth >= 768) setIsOpen(false)
   }, [])
@@ -88,44 +85,43 @@ const Navbar = () => {
               <Logo />
             </Link>
 
-            <div>
-              <NavigationMenu className="rounded-full bg-muted p-0.5 max-lg:hidden">
-                <NavigationMenuList className="flex gap-0">
-                  {navigationData.map((navItem) => {
-                    const isActive = pathname === navItem.href
-                    return (
-                      <NavigationMenuItem key={navItem.title}>
-                        <NavigationMenuLink
-                          active={isActive}
-                          className={cn(
-                            "block cursor-pointer rounded-full px-2 py-2 text-sm font-medium tracking-normal outline outline-transparent transition lg:px-4",
-                            isActive
-                              ? "bg-background text-foreground shadow-xs outline-border"
-                              : "text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-xs hover:outline-border"
-                          )}
-                        >
-                          <Link href={navItem.href}>{navItem.title}</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    )
-                  })}
-                </NavigationMenuList>
-              </NavigationMenu>
-            </div>
+            <NavigationMenu className="rounded-full bg-muted p-0.5 max-lg:hidden">
+              <NavigationMenuList className="flex gap-0">
+                {navigationData.map((navItem) => {
+                  const isActive = pathname === navItem.href
+                  return (
+                    <NavigationMenuItem key={navItem.title}>
+                      <NavigationMenuLink
+                        active={isActive}
+                        render={<Link href={navItem.href} />}
+                        className={cn(
+                          "block cursor-pointer rounded-full px-2 py-2 text-sm font-medium tracking-normal outline outline-transparent transition lg:px-4",
+                          isActive
+                            ? "bg-background text-foreground shadow-xs outline-border"
+                            : "text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-xs hover:outline-border"
+                        )}
+                      >
+                        {navItem.title}
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  )
+                })}
+              </NavigationMenuList>
+            </NavigationMenu>
 
             <div className="flex items-center gap-3">
+              <ThemeToggle />
+
               {isLoading ? (
                 <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
               ) : user ? (
                 <UserMenu context="public" />
               ) : (
                 <div className="flex items-center gap-2">
-                  <Link href="/login">
-                    <Button variant="ghost">Log In</Button>
-                  </Link>
-                  <Link href="/register">
-                    <CollaborateButton className="hidden lg:flex" />
-                  </Link>
+                  <Button render={<Link href="/login" />} variant="ghost">
+                    Log In
+                  </Button>
+                  <CollaborateButton className="hidden lg:flex" />
                 </div>
               )}
 
@@ -142,7 +138,7 @@ const Navbar = () => {
                       return (
                         <DropdownMenuItem
                           key={item.title}
-                          onClick={() => setIsOpen(false)}
+                          closeOnClick
                           className={cn(
                             "cursor-pointer",
                             isActive && "bg-muted/50"
@@ -166,7 +162,7 @@ const Navbar = () => {
                       <>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => setIsOpen(false)}
+                          closeOnClick
                           className="cursor-pointer"
                         >
                           <Link href="/register" className="w-full text-sm">
