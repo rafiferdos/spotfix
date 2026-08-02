@@ -1,5 +1,7 @@
+// components/book-service-dialog.tsx
 "use client"
 
+import { DateTimePicker } from "@/components/date-time-picker"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCreateBooking } from "@/features/bookings/hooks"
 import { useRouter } from "next/navigation"
@@ -30,22 +31,18 @@ export function BookServiceDialog({
   trigger,
 }: BookServiceDialogProps) {
   const [open, setOpen] = useState(false)
-  const [scheduleDate, setScheduleDate] = useState("")
+  const [scheduleDate, setScheduleDate] = useState<Date | undefined>()
   const router = useRouter()
   const { mutate: bookService, isPending } = useCreateBooking()
 
   const handleSubmit = () => {
     if (!scheduleDate) return
     bookService(
-      {
-        technicianId,
-        serviceId,
-        scheduleDate: new Date(scheduleDate).toISOString(),
-      },
+      { technicianId, serviceId, scheduleDate: scheduleDate.toISOString() },
       {
         onSuccess: () => {
           setOpen(false)
-          setScheduleDate("")
+          setScheduleDate(undefined)
           router.push("/customer")
         },
       }
@@ -64,13 +61,11 @@ export function BookServiceDialog({
         </DialogHeader>
 
         <div className="grid gap-2">
-          <Label htmlFor="scheduleDate">Preferred date & time</Label>
-          <Input
-            id="scheduleDate"
-            type="datetime-local"
+          <Label>Preferred date & time</Label>
+          <DateTimePicker
             value={scheduleDate}
-            min={new Date().toISOString().slice(0, 16)}
-            onChange={(e) => setScheduleDate(e.target.value)}
+            onChange={setScheduleDate}
+            minDate={new Date()}
           />
         </div>
 
