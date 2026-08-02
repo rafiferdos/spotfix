@@ -6,6 +6,7 @@ export interface TechnicianUser {
 
 export interface TechnicianType {
   id: string
+  userId: string
   skills: string[]
   experience: number
   pricing: number
