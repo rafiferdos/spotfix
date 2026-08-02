@@ -1,6 +1,7 @@
 "use client"
 
 import { CustomerBookingCard } from "@/components/customer-booking-card"
+import { PaymentDetailsDialog } from "@/components/payment-details-dialog"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Table,
@@ -105,6 +106,9 @@ function BookingsTab() {
 
 function PaymentsTab() {
   const { data: payments, isLoading, isError } = useMyPayments()
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
+    null
+  )
 
   if (isLoading) {
     return (
@@ -132,48 +136,63 @@ function PaymentsTab() {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border bg-card">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Service</TableHead>
-            <TableHead>Technician</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Paid At</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {payments.map((payment) => (
-            <TableRow key={payment.id}>
-              <TableCell>{payment.booking.service.title}</TableCell>
-              <TableCell>{payment.booking.technician.name}</TableCell>
-              <TableCell className="font-medium text-primary">
-                ৳{payment.amount}
-              </TableCell>
-              <TableCell>
-                <span
-                  className={cn(
-                    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                    payment.status === "COMPLETED" &&
-                      "bg-emerald-500/10 text-emerald-600",
-                    payment.status === "PENDING" &&
-                      "bg-amber-500/10 text-amber-600",
-                    payment.status === "FAILED" && "bg-red-500/10 text-red-600"
-                  )}
-                >
-                  {payment.status}
-                </span>
-              </TableCell>
-              <TableCell className="text-muted-foreground">
-                {payment.paidAt
-                  ? new Date(payment.paidAt).toLocaleDateString()
-                  : "—"}
-              </TableCell>
+    <>
+      <div className="overflow-hidden rounded-2xl border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Service</TableHead>
+              <TableHead>Technician</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Paid At</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {payments.map((payment) => (
+              <TableRow
+                key={payment.id}
+                className="cursor-pointer"
+                onClick={() => setSelectedPaymentId(payment.id)}
+              >
+                <TableCell>{payment.booking.service.title}</TableCell>
+                <TableCell>{payment.booking.technician.name}</TableCell>
+                <TableCell className="font-medium text-primary">
+                  ৳{payment.amount}
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+                      payment.status === "COMPLETED" &&
+                        "bg-emerald-500/10 text-emerald-600",
+                      payment.status === "PENDING" &&
+                        "bg-amber-500/10 text-amber-600",
+                      payment.status === "FAILED" &&
+                        "bg-red-500/10 text-red-600"
+                    )}
+                  >
+                    {payment.status}
+                  </span>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {payment.paidAt
+                    ? new Date(payment.paidAt).toLocaleDateString()
+                    : "—"}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {selectedPaymentId && (
+        <PaymentDetailsDialog
+          paymentId={selectedPaymentId}
+          open={!!selectedPaymentId}
+          onOpenChange={(open) => !open && setSelectedPaymentId(null)}
+        />
+      )}
+    </>
   )
 }
