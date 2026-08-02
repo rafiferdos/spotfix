@@ -3,6 +3,7 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -52,35 +53,39 @@ export function UserMenu({
         {initials}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuLabel className="truncate">{user.name}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {context === "public" ? (
-          <DropdownMenuItem className="cursor-pointer" closeOnClick>
-            <Link
-              href={ROLE_DASHBOARD_PATH[user.role]}
-              className="flex w-full items-center gap-2"
-            >
-              <LayoutDashboard />
-              Dashboard
-            </Link>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="truncate">
+            {user.name}
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {context === "public" ? (
+            <DropdownMenuItem className="cursor-pointer" closeOnClick>
+              <Link
+                href={ROLE_DASHBOARD_PATH[user.role]}
+                className="flex w-full items-center gap-2"
+              >
+                <LayoutDashboard />
+                Dashboard
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem className="cursor-pointer" closeOnClick>
+              <Link href="/" className="flex w-full items-center gap-2">
+                <Home />
+                Home
+              </Link>
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuItem
+            variant="destructive"
+            className="cursor-pointer"
+            onClick={handleLogout}
+          >
+            <LogOut />
+            Logout
           </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem className="cursor-pointer" closeOnClick>
-            <Link href="/" className="flex w-full items-center gap-2">
-              <Home />
-              Home
-            </Link>
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem
-          variant="destructive"
-          className="cursor-pointer"
-          onClick={handleLogout}
-        >
-          <LogOut />
-          Logout
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>{" "}
     </DropdownMenu>
   )
 }
