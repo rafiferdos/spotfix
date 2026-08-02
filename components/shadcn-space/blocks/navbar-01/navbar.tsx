@@ -1,10 +1,12 @@
 "use client"
 import Logo from "@/assets/logo/logo"
 import { Button } from "@/components/ui/button"
+import { UserMenu } from "@/components/user-menu"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -14,6 +16,7 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/store/use-auth"
 import { ArrowUpRight, TextAlignJustify } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -25,18 +28,9 @@ export type NavigationSection = {
 }
 
 const navigationData: NavigationSection[] = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "Technicians",
-    href: "/technicians",
-  },
-  {
-    title: "Services",
-    href: "/services",
-  },
+  { title: "Home", href: "/" },
+  { title: "Technicians", href: "/technicians" },
+  { title: "Services", href: "/services" },
 ]
 
 const CollaborateButton = ({ className }: { className?: string }) => (
@@ -58,8 +52,8 @@ const CollaborateButton = ({ className }: { className?: string }) => (
 const Navbar = () => {
   const [sticky, setSticky] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-
   const pathname = usePathname()
+  const { user, isLoading } = useAuth()
 
   const handleScroll = useCallback(() => {
     setSticky(window.scrollY >= 50)
@@ -72,7 +66,6 @@ const Navbar = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
     window.addEventListener("resize", handleResize)
-
     return () => {
       window.removeEventListener("scroll", handleScroll)
       window.removeEventListener("resize", handleResize)
@@ -100,10 +93,8 @@ const Navbar = () => {
                 <NavigationMenuList className="flex gap-0">
                   {navigationData.map((navItem) => {
                     const isActive = pathname === navItem.href
-
                     return (
                       <NavigationMenuItem key={navItem.title}>
-                        {/* FIX: Removed legacyBehavior. Used asChild on NavigationMenuLink, placed Link inside. */}
                         <NavigationMenuLink
                           active={isActive}
                           className={cn(
@@ -121,45 +112,72 @@ const Navbar = () => {
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
-            <CollaborateButton className="hidden lg:flex" />
 
-            <div className="lg:hidden">
-              <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-                <DropdownMenuTrigger className="flex cursor-pointer items-center justify-center rounded-full border border-border bg-background p-2 transition-colors outline-none">
-                  <TextAlignJustify size={20} />
-                  <span className="sr-only">Menu</span>
-                </DropdownMenuTrigger>
+            <div className="flex items-center gap-3">
+              {isLoading ? (
+                <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
+              ) : user ? (
+                <UserMenu context="public" />
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link href="/login">
+                    <Button variant="ghost">Log In</Button>
+                  </Link>
+                  <Link href="/register">
+                    <CollaborateButton className="hidden lg:flex" />
+                  </Link>
+                </div>
+              )}
 
-                <DropdownMenuContent align="end" className="mt-2 w-56">
-                  {navigationData.map((item) => {
-                    const isActive = pathname === item.href
+              <div className="lg:hidden">
+                <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+                  <DropdownMenuTrigger className="flex cursor-pointer items-center justify-center rounded-full border border-border bg-background p-2 transition-colors outline-none">
+                    <TextAlignJustify size={20} />
+                    <span className="sr-only">Menu</span>
+                  </DropdownMenuTrigger>
 
-                    return (
-                      /* FIX: Removed asChild. Handled the click event on the DropdownMenuItem to close the menu, and placed the standard Link inside. */
-                      <DropdownMenuItem
-                        key={item.title}
-                        onClick={() => setIsOpen(false)}
-                        className={cn(
-                          "cursor-pointer",
-                          isActive && "bg-muted/50"
-                        )}
-                      >
-                        <Link
-                          href={item.href}
+                  <DropdownMenuContent align="end" className="mt-2 w-56">
+                    {navigationData.map((item) => {
+                      const isActive = pathname === item.href
+                      return (
+                        <DropdownMenuItem
+                          key={item.title}
+                          onClick={() => setIsOpen(false)}
                           className={cn(
-                            "w-full text-sm",
-                            isActive
-                              ? "font-bold text-primary"
-                              : "font-medium text-foreground"
+                            "cursor-pointer",
+                            isActive && "bg-muted/50"
                           )}
                         >
-                          {item.title}
-                        </Link>
-                      </DropdownMenuItem>
-                    )
-                  })}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                          <Link
+                            href={item.href}
+                            className={cn(
+                              "w-full text-sm",
+                              isActive
+                                ? "font-bold text-primary"
+                                : "font-medium text-foreground"
+                            )}
+                          >
+                            {item.title}
+                          </Link>
+                        </DropdownMenuItem>
+                      )
+                    })}
+                    {!isLoading && !user && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => setIsOpen(false)}
+                          className="cursor-pointer"
+                        >
+                          <Link href="/register" className="w-full text-sm">
+                            Join Spotfix
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </nav>
         </div>
