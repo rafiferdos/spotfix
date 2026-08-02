@@ -1,3 +1,4 @@
+import { BookingDetailsDialog } from "@/components/booking-details-dialog"
 import { BookingStatusBadge } from "@/components/booking-status-badge"
 import { LeaveReviewDialog } from "@/components/leave-review-dialog"
 import { Button } from "@/components/ui/button"
@@ -18,7 +19,10 @@ export function CustomerBookingCard({ booking }: { booking: BookingType }) {
             #{booking.id.slice(0, 8)}
           </p>
         </div>
-        <BookingStatusBadge status={booking.status} />
+        <div className="flex items-center gap-2">
+          <BookingStatusBadge status={booking.status} />
+          <BookingDetailsDialog bookingId={booking.id} />
+        </div>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-2 text-sm">
