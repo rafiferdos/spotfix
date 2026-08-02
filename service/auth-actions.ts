@@ -32,3 +32,9 @@ export const loginAction = async (email: string, password: string) => {
 
   return result
 }
+
+export const logoutAction = async () => {
+  const cookieStore = await cookies()
+  cookieStore.delete("accessToken")
+  cookieStore.delete("refreshToken")
+}
