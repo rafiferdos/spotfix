@@ -29,8 +29,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  console.log(accessToken, refreshToken, isTokenValid, userRole, pathname)
-
   // 2. Silent Token Refresh
   if (!isTokenValid && refreshToken) {
     try {
@@ -39,12 +37,11 @@ export async function proxy(request: NextRequest) {
       if (result?.success && result?.data?.accessToken) {
         const newAccessToken = result.data.accessToken
 
-        // FIX 1: Add path explicitly to ensure global scoping
         response.cookies.set({
           name: "accessToken",
           value: newAccessToken,
           httpOnly: true,
-          maxAge: 60 * 60 * 24, // 1 day
+          maxAge: 60 * 60 * 24,
           sameSite: "lax",
           secure: process.env.NODE_ENV === "production",
           path: "/",
@@ -59,7 +56,7 @@ export async function proxy(request: NextRequest) {
         response.cookies.delete("refreshToken")
       }
     } catch (error) {
-      console.error("Token refresh failed in proxy:", error)
+      console.error("Token refresh failed in middleware:", error)
     }
   }
 
@@ -70,7 +67,6 @@ export async function proxy(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(route + "/")
   )
 
-  // FIX 2: Securely copy all cookie attributes without destructing them
   const redirectTo = (url: string) => {
     const redirectResponse = NextResponse.redirect(new URL(url, request.url))
 
@@ -102,20 +98,24 @@ export async function proxy(request: NextRequest) {
   if (!isTokenValid && !isPublicRoute && !isAuthRoute) {
     const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("redirectTo", pathname)
-
-    // FIX 3: Use the helper function here as well to retain cookies during redirection
     return redirectTo(loginUrl.toString())
   }
 
-  // Role-based Access Control (RBAC)
-  if (pathname.startsWith("/customer") && userRole !== "CUSTOMER") {
-    return redirectTo("/not-found")
-  }
-  if (pathname.startsWith("/technician") && userRole !== "TECHNICIAN") {
-    return redirectTo("/not-found")
-  }
-  if (pathname.startsWith("/admin") && userRole !== "ADMIN") {
-    return redirectTo("/not-found")
+  // Role-based Access Control — skip entirely for public routes,
+  // and use exact-boundary matching so "/technicians" never matches "/technician"
+  if (!isPublicRoute) {
+    const isExactOrNested = (base: string) =>
+      pathname === base || pathname.startsWith(base + "/")
+
+    if (isExactOrNested("/customer") && userRole !== "CUSTOMER") {
+      return redirectTo("/not-found")
+    }
+    if (isExactOrNested("/technician") && userRole !== "TECHNICIAN") {
+      return redirectTo("/not-found")
+    }
+    if (isExactOrNested("/admin") && userRole !== "ADMIN") {
+      return redirectTo("/not-found")
+    }
   }
 
   return response
