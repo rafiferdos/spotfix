@@ -50,7 +50,7 @@ export function Footer() {
       <div className="absolute top-0 right-1/2 left-1/2 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/20 blur" />
       <div className="grid w-full gap-8 py-6 md:py-8 lg:grid-cols-3 lg:gap-8">
         <AnimatedContainer className="space-y-4">
-          <Logo className="h-4" />
+          <Logo className="h-4 md:h-16" />
           <p className="mt-8 text-sm text-muted-foreground md:mt-0">
             Book trusted, verified home service professionals in minutes.
           </p>
