@@ -1,6 +1,6 @@
 // components/footer.tsx
 "use client"
-import Logo from "@/assets/logo/logo"
+import { Logo } from "@/assets/logo/logo"
 import { FacebookIcon } from "@/components/icons/facebook-icon"
 import { InstagramIcon } from "@/components/icons/instagram-icon"
 import { LinkedinIcon } from "@/components/icons/linkedin-icon"

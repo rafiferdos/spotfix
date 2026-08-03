@@ -1,6 +1,6 @@
 // components/shadcn-space/blocks/navbar-01/navbar.tsx
 "use client"
-import Logo from "@/assets/logo/logo"
+import { Logo } from "@/assets/logo/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import {
