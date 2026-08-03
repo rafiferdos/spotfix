@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { sileo } from "sileo"
-import { createService, getServices } from "./api"
+import { createService, deleteService, getServices } from "./api"
 
 // Backend error response structure
 interface ErrorResponse {
@@ -35,6 +35,26 @@ export const useCreateService = () => {
         description:
           error.response?.data?.message ||
           "An error occurred while creating the service.",
+      })
+    },
+  })
+}
+
+export const useDeleteService = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteService,
+    onSuccess: () => {
+      sileo.success({
+        title: "Deleted",
+        description: "The service has been removed.",
+      })
+      queryClient.invalidateQueries({ queryKey: ["services"] })
+    },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      sileo.error({
+        title: "Error",
+        description: error.response?.data?.message || "Something went wrong.",
       })
     },
   })
