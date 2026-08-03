@@ -21,9 +21,13 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
 import { useCategories } from "@/features/categories/hooks"
-import { useCreateService, useServices } from "@/features/services/hooks"
+import {
+  useCreateService,
+  useDeleteService,
+  useServices,
+} from "@/features/services/hooks"
 import { useAuth } from "@/store/use-auth"
-import { AlertCircle, Wrench } from "lucide-react"
+import { AlertCircle, Trash2, Wrench } from "lucide-react"
 import { motion } from "motion/react"
 import { useMemo, useState } from "react"
 
@@ -32,6 +36,7 @@ export default function TechnicianServicesPage() {
   const { data: allServices, isLoading, isError } = useServices()
   const { data: categories } = useCategories()
   const { mutate: create, isPending } = useCreateService()
+  const { mutate: removeService, isPending: isDeleting } = useDeleteService()
 
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
@@ -175,9 +180,23 @@ export default function TechnicianServicesPage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {myServices.map((service) => (
             <div key={service.id} className="rounded-2xl border bg-card p-4">
-              <div className="flex items-center gap-2">
-                <Wrench className="h-4 w-4 text-primary" />
-                <h3 className="font-medium">{service.title}</h3>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2">
+                  <Wrench className="h-4 w-4 text-primary" />
+                  <h3 className="font-medium">{service.title}</h3>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  className="text-destructive hover:bg-destructive/10"
+                  disabled={isDeleting}
+                  onClick={() =>
+                    confirm(`Delete "${service.title}"?`) &&
+                    removeService(service.id)
+                  }
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
               </div>
               <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                 {service.description}
