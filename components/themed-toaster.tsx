@@ -1,19 +1,28 @@
 "use client"
 
+import { useTheme } from "next-themes"
 import { Toaster } from "sileo"
 
-// hardcoded from app/globals.css `.dark` block — popover/popover-foreground
-const TOAST_BG = "oklch(0.216 0.006 56.043)"
-const TOAST_TEXT = "oklch(0.985_0.001_106.423)" // underscored for Tailwind arbitrary value
-
 export function ThemedToaster() {
+  const { resolvedTheme } = useTheme()
+
+  // Dark mode → dark-gray card; Light mode → pure dark (near-black) card
+  const fill =
+    resolvedTheme === "dark"
+      ? "oklch(0.216 0.006 56.043)" // dark gray (existing --card in .dark)
+      : "oklch(0.147 0.004 49.25)" // near-black (existing --foreground in :root)
+
+  const textColor = "oklch(0.985 0.001 106.423)"
+
   return (
     <Toaster
       position="top-center"
-      fill={TOAST_BG}
-      styles={{
-        title: `!text-[${TOAST_TEXT}]`,
-        description: `!text-[${TOAST_TEXT}] !opacity-70`,
+      options={{
+        fill,
+        styles: {
+          title: `!text-[${textColor}]`,
+          description: `!text-[${textColor}] !opacity-70`,
+        },
       }}
     />
   )
