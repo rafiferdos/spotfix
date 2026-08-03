@@ -3,8 +3,8 @@ import { Geist_Mono, Montserrat, Outfit } from "next/font/google"
 import AuthProvider from "@/components/providers/auth-provider"
 import QueryProvider from "@/components/providers/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
+import { ThemedToaster } from "@/components/themed-toaster"
 import { cn } from "@/lib/utils"
-import { Toaster } from "sileo"
 import "./globals.css"
 
 const outfitHeading = Outfit({ subsets: ["latin"], variable: "--font-heading" })
@@ -34,7 +34,7 @@ export default function RootLayout({
       )}
     >
       <body suppressHydrationWarning>
-        <Toaster position="top-center" theme="system" />
+        <ThemedToaster />
         <ThemeProvider>
           <QueryProvider>
             <AuthProvider>{children}</AuthProvider>
