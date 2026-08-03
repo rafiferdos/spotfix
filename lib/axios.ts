@@ -12,16 +12,48 @@ export const axiosInstance = axios.create({
   },
 })
 
+let refreshPromise: Promise<boolean> | null = null
+
+const refreshAccessToken = async () => {
+  if (!refreshPromise) {
+    refreshPromise = axiosInstance
+      .post("/auth/refresh-token")
+      .then(() => true)
+      .catch(() => false)
+      .finally(() => {
+        refreshPromise = null
+      })
+  }
+  return refreshPromise
+}
+
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
-    const isMeCheck = error.config?.url?.includes("/auth/me")
+  async (error) => {
+    const originalRequest = error.config
+    const isMeCheck = originalRequest?.url?.includes("/auth/me")
+    const isRefreshCall = originalRequest?.url?.includes("/auth/refresh-token")
+    const isLoginCall = originalRequest?.url?.includes("/auth/login")
 
-    if (error.response?.status === status.UNAUTHORIZED && !isMeCheck) {
-      sileo.error({
-        title: "Session Expired",
-        description: "Your session has expired. Please log in again.",
-      })
+    if (
+      error.response?.status === status.UNAUTHORIZED &&
+      !isRefreshCall &&
+      !isLoginCall &&
+      !originalRequest?._retry
+    ) {
+      originalRequest._retry = true
+      const refreshed = await refreshAccessToken()
+
+      if (refreshed) {
+        return axiosInstance(originalRequest)
+      }
+
+      if (!isMeCheck) {
+        sileo.error({
+          title: "Session Expired",
+          description: "Your session has expired. Please log in again.",
+        })
+      }
 
       useAuth.getState().logout()
 
@@ -32,6 +64,7 @@ axiosInstance.interceptors.response.use(
         window.location.href = "/login"
       }
     }
+
     return Promise.reject(error)
   }
 )
