@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import config from "@/config"
 import { USER_ROLES } from "@/lib/constants"
 import { RegisterFormValues, registerSchema } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -37,23 +36,21 @@ export default function RegisterPage() {
   })
 
   const onSubmit = async (values: RegisterFormValues) => {
-    const registerRequest = axios.post('/auth/register', values)
-
+    const registerRequest = axios.post("/auth/register", values)
     try {
-      const response = await sileo.promise(registerRequest, {
+      await sileo.promise(registerRequest, {
         loading: { title: "Creating your account..." },
         success: { title: "Account created successfully!" },
         error: { title: "Registration failed. Please try again." },
       })
       router.push("/login")
-    } catch (error) {
+    } catch {
       sileo.error({
         title: "Registration failed",
         description: "Please try again.",
       })
     }
   }
-
   const registerFields: FormFieldConfig<RegisterFormValues>[] = [
     {
       name: "name",
