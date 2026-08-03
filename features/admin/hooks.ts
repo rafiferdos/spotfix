@@ -39,6 +39,23 @@ export const useBanUser = () => {
   })
 }
 
+export const useUnbanUser = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => banUser(id),
+    onSuccess: () => {
+      sileo.success({ title: "User unbanned" })
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] })
+    },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      sileo.error({
+        title: "Failed to unban user",
+        description: error.response?.data?.message || "Something went wrong.",
+      })
+    },
+  })
+}
+
 export const useCreateCategory = () => {
   const queryClient = useQueryClient()
   return useMutation({
