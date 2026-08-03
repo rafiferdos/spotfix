@@ -13,7 +13,11 @@ export const getAllUsers = async (): Promise<AdminUser[]> => {
 }
 
 export const banUser = async (id: string): Promise<AdminUser> => {
-  const res = await axiosInstance.patch(`/admin/users/${id}`)
+  const res = await axiosInstance.patch(`/admin/users/${id}/ban`)
+  return res.data.data
+}
+export const unbanUser = async (id: string): Promise<AdminUser> => {
+  const res = await axiosInstance.patch(`/admin/users/${id}/unban`)
   return res.data.data
 }
 
