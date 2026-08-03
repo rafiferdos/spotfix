@@ -3,12 +3,15 @@ import { BookingStatusBadge } from "@/components/booking-status-badge"
 import { LeaveReviewDialog } from "@/components/leave-review-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { useCancelBooking } from "@/features/bookings/hooks"
 import { BookingType } from "@/features/bookings/types"
 import { Calendar } from "lucide-react"
 import Link from "next/link"
 
 export function CustomerBookingCard({ booking }: { booking: BookingType }) {
   const scheduleDate = new Date(booking.scheduleDate)
+  const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking()
+  const CANCELLABLE: BookingType["status"][] = ["REQUESTED", "ACCEPTED", "PAID"]
 
   return (
     <Card>
@@ -49,6 +52,18 @@ export function CustomerBookingCard({ booking }: { booking: BookingType }) {
         )}
         {booking.status === "COMPLETED" && (
           <LeaveReviewDialog bookingId={booking.id} />
+        )}
+        {CANCELLABLE.includes(booking.status) && (
+          <Button
+            variant="outline"
+            className="w-full text-destructive hover:bg-destructive/10"
+            disabled={isCancelling}
+            onClick={() =>
+              confirm("Cancel this booking?") && cancelBooking(booking.id)
+            }
+          >
+            {isCancelling ? "Cancelling..." : "Cancel Booking"}
+          </Button>
         )}
       </CardFooter>
     </Card>
