@@ -55,7 +55,7 @@ export const isAccessTokenExist = async () => {
     return null
   }
 
-  const accessSecret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET)
+  const accessSecret = new TextEncoder().encode(process.env.JWT_SECRET)
   const refreshSecret = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET)
 
   let isAccessTokenValid = false

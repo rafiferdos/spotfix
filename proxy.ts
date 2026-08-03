@@ -16,7 +16,7 @@ export async function proxy(request: NextRequest) {
   let userRole = null
   let isTokenValid = false
 
-  const accessSecret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET)
+  const accessSecret = new TextEncoder().encode(process.env.JWT_SECRET)
 
   // 1. Check if Access Token is valid
   if (accessToken) {
