@@ -1,5 +1,6 @@
 "use client"
 
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -43,6 +44,17 @@ export default function TechnicianServicesPage() {
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
   const [categoryId, setCategoryId] = useState("")
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string
+    title: string
+  } | null>(null)
+
+  const confirmDelete = () => {
+    if (!deleteTarget) return
+    removeService(deleteTarget.id, {
+      onSuccess: () => setDeleteTarget(null),
+    })
+  }
 
   const myServices = useMemo(
     () => allServices?.filter((s) => s.technicianId === user?.id) ?? [],
@@ -179,6 +191,7 @@ export default function TechnicianServicesPage() {
           You haven&apos;t added any services yet.
         </p>
       )}
+
       {!isLoading && !isError && myServices.length > 0 && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {myServices.map((service) => (
@@ -192,10 +205,8 @@ export default function TechnicianServicesPage() {
                   variant="ghost"
                   size="icon-xs"
                   className="text-destructive hover:bg-destructive/10"
-                  disabled={isDeleting}
                   onClick={() =>
-                    confirm(`Delete "${service.title}"?`) &&
-                    removeService(service.id)
+                    setDeleteTarget({ id: service.id, title: service.title })
                   }
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -216,6 +227,20 @@ export default function TechnicianServicesPage() {
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title="Delete this service?"
+        description={
+          deleteTarget
+            ? `"${deleteTarget.title}" will be permanently removed. This can't be undone.`
+            : undefined
+        }
+        confirmLabel="Delete"
+        loading={isDeleting}
+        onConfirm={confirmDelete}
+      />
     </motion.div>
   )
 }
