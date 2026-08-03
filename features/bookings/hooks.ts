@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { sileo } from "sileo"
-import { createBooking, getBookingById, getMyBookings } from "./api"
+import {
+  cancelBooking,
+  createBooking,
+  getBookingById,
+  getMyBookings,
+} from "./api"
 import { CreateBookingPayload } from "./types"
 
 interface ErrorResponse {
@@ -41,6 +46,26 @@ export const useCreateBooking = () => {
         description:
           error.response?.data?.message ||
           "Something went wrong while creating the booking.",
+      })
+    },
+  })
+}
+
+export const useCancelBooking = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => cancelBooking(id),
+    onSuccess: () => {
+      sileo.success({
+        title: "Booking cancelled",
+        description: "Your booking has been cancelled.",
+      })
+      queryClient.invalidateQueries({ queryKey: ["bookings"] })
+    },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      sileo.error({
+        title: "Cancel failed",
+        description: error.response?.data?.message || "Something went wrong.",
       })
     },
   })
