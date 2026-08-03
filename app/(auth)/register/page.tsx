@@ -13,13 +13,29 @@ import {
 } from "@/components/ui/card"
 import { axiosInstance } from "@/lib/axios"
 import { USER_ROLES } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import { RegisterFormValues, registerSchema } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
+import { Check, HardHat, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { sileo } from "sileo"
+
+const ROLE_OPTIONS = [
+  {
+    value: USER_ROLES.CUSTOMER,
+    title: "Customer",
+    description: "Book trusted technicians for home services.",
+    icon: ShoppingBag,
+  },
+  {
+    value: USER_ROLES.TECHNICIAN,
+    title: "Technician",
+    description: "Offer your services and manage bookings.",
+    icon: HardHat,
+  },
+] as const
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -52,6 +68,7 @@ export default function RegisterPage() {
       })
     }
   }
+
   const registerFields: FormFieldConfig<RegisterFormValues>[] = [
     {
       name: "name",
@@ -71,12 +88,7 @@ export default function RegisterPage() {
       type: "password",
       placeholder: "********",
     },
-    {
-      name: "phone",
-      label: "Phone",
-      type: "text",
-      placeholder: "+1234567890",
-    },
+    { name: "phone", label: "Phone", type: "text", placeholder: "+1234567890" },
     {
       name: "address",
       label: "Address",
@@ -103,6 +115,64 @@ export default function RegisterPage() {
 
         <CardContent>
           <AuthForm form={form} onSubmit={onSubmit} fields={registerFields}>
+            <div className="grid gap-2">
+              <span className="text-sm font-medium">Register as</span>
+              <Controller
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <div className="grid grid-cols-2 gap-3">
+                    {ROLE_OPTIONS.map((option) => {
+                      const isSelected = field.value === option.value
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => field.onChange(option.value)}
+                          aria-pressed={isSelected}
+                          className={cn(
+                            "group relative flex flex-col items-start gap-2 rounded-2xl border p-4 text-left transition",
+                            isSelected
+                              ? "border-primary bg-primary/5 ring-2 ring-primary/30"
+                              : "border-border hover:border-primary/40 hover:bg-muted"
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "flex h-9 w-9 items-center justify-center rounded-full transition",
+                              isSelected
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground group-hover:text-foreground"
+                            )}
+                          >
+                            <option.icon className="h-4 w-4" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">
+                              {option.title}
+                            </p>
+                            <p className="mt-0.5 text-xs text-muted-foreground">
+                              {option.description}
+                            </p>
+                          </div>
+                          {isSelected && (
+                            <span className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                              <Check className="h-3 w-3" />
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+              />
+              {form.formState.errors.role && (
+                <p className="text-sm font-medium text-red-500">
+                  {form.formState.errors.role.message}
+                </p>
+              )}
+            </div>
+
             <CardFooter className="mt-6 flex-col gap-2 p-0">
               <Button
                 type="submit"
