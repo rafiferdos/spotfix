@@ -82,7 +82,7 @@ const Navbar = () => {
             )}
           >
             <Link href="/">
-              <Logo />
+              <Logo className="w-content h-5 md:h-12" />
             </Link>
 
             <NavigationMenu className="rounded-full bg-muted p-0.5 max-lg:hidden">
