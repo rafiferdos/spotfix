@@ -9,8 +9,8 @@ export function ThemedToaster() {
   // Dark mode → dark-gray card; Light mode → pure dark (near-black) card
   const fill =
     resolvedTheme === "dark"
-      ? "oklch(0.216 0.006 56.043)" // dark gray (existing --card in .dark)
-      : "oklch(0.147 0.004 49.25)" // near-black (existing --foreground in :root)
+      ? "oklch(0.147 0.004 49.25)" // dark gray (existing --card in .dark)
+      : "oklch(0.280 0.006 56.043)" // near-black (existing --foreground in :root)
 
   const textColor = "oklch(0.985 0.001 106.423)"
 
