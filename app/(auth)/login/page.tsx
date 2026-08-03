@@ -48,7 +48,7 @@ export default function LoginPage() {
       if (user.role === "ADMIN") router.push("/admin")
       else if (user.role === "TECHNICIAN") router.push("/technician")
       else router.push("/customer")
-    } catch (error) {
+    } catch {
       sileo.error({
         title: "Login failed",
         description: "Please check your credentials and try again.",
