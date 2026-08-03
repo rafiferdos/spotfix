@@ -8,16 +8,18 @@ import {
   useUpdateAvailability,
 } from "@/features/technician-dashboard/hooks"
 import { motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 export default function AvailabilityPage() {
   const { data: profile, isLoading } = useMyTechnicianProfile()
   const { mutate: save, isPending } = useUpdateAvailability()
   const [slots, setSlots] = useState<string[]>([])
+  const [loadedProfileId, setLoadedProfileId] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (profile) setSlots(profile.availabilitySlots)
-  }, [profile])
+  if (profile && profile.id !== loadedProfileId) {
+    setLoadedProfileId(profile.id)
+    setSlots(profile.availabilitySlots)
+  }
 
   if (isLoading) {
     return (
@@ -40,10 +42,8 @@ export default function AvailabilityPage() {
           Let customers know when you&apos;re free to take jobs.
         </p>
       </div>
-
       <div className="rounded-2xl border bg-card p-6">
         <AvailabilitySlotBuilder slots={slots} onChange={setSlots} />
-
         <Button
           className="mt-6 w-full"
           onClick={() => save({ slots })}
