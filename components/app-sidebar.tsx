@@ -1,6 +1,6 @@
 "use client"
 
-import Logo from "@/assets/logo/logo"
+import { Logo } from "@/assets/logo/logo"
 import { LogoutDialog } from "@/components/logout-dialog"
 import { ThemeToggle } from "@/components/theme-toggle"
 import {
@@ -75,7 +75,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link href="/" className="flex items-center px-2 py-1">
-          <Logo className="h-5 w-auto" />
+          <Logo className="mx-auto h-5 w-auto md:h-16" />
         </Link>
       </SidebarHeader>
 
