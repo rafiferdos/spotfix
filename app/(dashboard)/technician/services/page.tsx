@@ -129,7 +129,10 @@ export default function TechnicianServicesPage() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="svc-category">Category</Label>
-                <Select value={categoryId} onValueChange={setCategoryId}>
+                <Select
+                  value={categoryId}
+                  onValueChange={(value) => setCategoryId(value ?? "")}
+                >
                   <SelectTrigger id="svc-category" className="w-full">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
