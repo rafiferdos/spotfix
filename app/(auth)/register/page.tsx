@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { axiosInstance } from "@/lib/axios"
 import { USER_ROLES } from "@/lib/constants"
 import { RegisterFormValues, registerSchema } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -36,7 +37,7 @@ export default function RegisterPage() {
   })
 
   const onSubmit = async (values: RegisterFormValues) => {
-    const registerRequest = axios.post("/auth/register", values)
+    const registerRequest = axiosInstance.post("/auth/register", values)
     try {
       await sileo.promise(registerRequest, {
         loading: { title: "Creating your account..." },
