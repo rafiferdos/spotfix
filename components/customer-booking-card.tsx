@@ -1,5 +1,8 @@
+"use client"
+
 import { BookingDetailsDialog } from "@/components/booking-details-dialog"
 import { BookingStatusBadge } from "@/components/booking-status-badge"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { LeaveReviewDialog } from "@/components/leave-review-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -7,11 +10,20 @@ import { useCancelBooking } from "@/features/bookings/hooks"
 import { BookingType } from "@/features/bookings/types"
 import { Calendar } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+
+const CANCELLABLE: BookingType["status"][] = ["REQUESTED", "ACCEPTED", "PAID"]
 
 export function CustomerBookingCard({ booking }: { booking: BookingType }) {
   const scheduleDate = new Date(booking.scheduleDate)
   const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking()
-  const CANCELLABLE: BookingType["status"][] = ["REQUESTED", "ACCEPTED", "PAID"]
+  const [confirmOpen, setConfirmOpen] = useState(false)
+
+  const handleConfirmCancel = () => {
+    cancelBooking(booking.id, {
+      onSuccess: () => setConfirmOpen(false),
+    })
+  }
 
   return (
     <Card>
@@ -58,14 +70,23 @@ export function CustomerBookingCard({ booking }: { booking: BookingType }) {
             variant="outline"
             className="w-full text-destructive hover:bg-destructive/10"
             disabled={isCancelling}
-            onClick={() =>
-              confirm("Cancel this booking?") && cancelBooking(booking.id)
-            }
+            onClick={() => setConfirmOpen(true)}
           >
             {isCancelling ? "Cancelling..." : "Cancel Booking"}
           </Button>
         )}
       </CardFooter>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Cancel this booking?"
+        description="This will cancel your booking request. This action cannot be undone."
+        confirmLabel="Cancel Booking"
+        cancelLabel="Keep Booking"
+        loading={isCancelling}
+        onConfirm={handleConfirmCancel}
+      />
     </Card>
   )
 }
