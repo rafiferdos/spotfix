@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
       const { payload } = await jwtVerify(accessToken, accessSecret)
       userRole = payload.role as string
       isTokenValid = true
-    } catch (error) {
+    } catch {
       isTokenValid = false
     }
   }
