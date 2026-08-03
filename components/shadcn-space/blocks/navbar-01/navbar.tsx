@@ -13,7 +13,6 @@ import {
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import { UserMenu } from "@/components/user-menu"
@@ -91,9 +90,9 @@ const Navbar = () => {
                   const isActive = pathname === navItem.href
                   return (
                     <NavigationMenuItem key={navItem.title}>
-                      <NavigationMenuLink
-                        active={isActive}
-                        render={<Link href={navItem.href} />}
+                      <Link
+                        href={navItem.href}
+                        aria-current={isActive ? "page" : undefined}
                         className={cn(
                           "block cursor-pointer rounded-full px-2 py-2 text-sm font-medium tracking-normal outline outline-transparent transition lg:px-4",
                           isActive
@@ -102,7 +101,7 @@ const Navbar = () => {
                         )}
                       >
                         {navItem.title}
-                      </NavigationMenuLink>
+                      </Link>
                     </NavigationMenuItem>
                   )
                 })}
