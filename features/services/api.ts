@@ -13,3 +13,7 @@ export const createService = async (payload: CreateServicePayload) => {
   const response = await axiosInstance.post("/services", payload)
   return response.data.data
 }
+
+export const deleteService = async (id: string): Promise<void> => {
+  await axiosInstance.delete(`/services/${id}`)
+}
