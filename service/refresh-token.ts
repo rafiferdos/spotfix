@@ -33,7 +33,7 @@ export const getNewAccessToken = async (tokenFromProxy?: string | null) => {
 
     const result = await res.json()
     return result
-  } catch (error) {
+  } catch {
     sileo.error({
       title: "Failed to fetch new access token",
       description:
@@ -65,7 +65,7 @@ export const isAccessTokenExist = async () => {
     try {
       await jwtVerify(accessToken, accessSecret)
       isAccessTokenValid = true
-    } catch (error) {
+    } catch {
       isAccessTokenValid = false
     }
   }
@@ -74,7 +74,7 @@ export const isAccessTokenExist = async () => {
     try {
       await jwtVerify(refreshToken, refreshSecret)
       isRefreshTokenValid = true
-    } catch (error) {
+    } catch {
       isRefreshTokenValid = false
     }
   }
