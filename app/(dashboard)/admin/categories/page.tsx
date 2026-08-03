@@ -1,6 +1,7 @@
+// app/(dashboard)/admin/categories/page.tsx
 "use client"
 
-import { FadeIn } from "@/components/fade-in"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,6 +22,10 @@ export default function AdminCategoriesPage() {
   const { mutate: remove, isPending: isDeleting } = useDeleteCategory()
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string
+    name: string
+  } | null>(null)
 
   const handleCreate = () => {
     if (!name.trim() || !description.trim()) return
@@ -33,6 +38,11 @@ export default function AdminCategoriesPage() {
         },
       }
     )
+  }
+
+  const confirmDelete = () => {
+    if (!deleteTarget) return
+    remove(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) })
   }
 
   return (
@@ -95,8 +105,7 @@ export default function AdminCategoriesPage() {
       {!isLoading && !isError && categories && categories.length > 0 && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {categories.map((cat) => (
-            <FadeIn
-              delay={0.1 * categories.indexOf(cat)}
+            <div
               key={cat.id}
               className="flex items-start justify-between gap-3 rounded-2xl border bg-card p-4"
             >
@@ -115,17 +124,28 @@ export default function AdminCategoriesPage() {
                 variant="ghost"
                 size="icon-xs"
                 className="shrink-0 text-destructive hover:bg-destructive/10"
-                disabled={isDeleting}
-                onClick={() =>
-                  confirm(`Delete "${cat.name}"?`) && remove(cat.id)
-                }
+                onClick={() => setDeleteTarget({ id: cat.id, name: cat.name })}
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
-            </FadeIn>
+            </div>
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        title="Delete this category?"
+        description={
+          deleteTarget
+            ? `"${deleteTarget.name}" will be permanently removed. This can't be undone.`
+            : undefined
+        }
+        confirmLabel="Delete"
+        loading={isDeleting}
+        onConfirm={confirmDelete}
+      />
     </motion.div>
   )
 }
