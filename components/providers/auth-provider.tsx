@@ -21,7 +21,7 @@ export default function AuthProvider({
         } else {
           logout()
         }
-      } catch (error) {
+      } catch {
         // If 401/403 or network error occurs, clear the state
         logout()
       } finally {
