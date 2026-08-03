@@ -108,7 +108,10 @@ export async function proxy(request: NextRequest) {
   }
 
   // Role-based Access Control (RBAC)
-  if (pathname.startsWith("/dashboard") && userRole !== "CUSTOMER") {
+  if (pathname.startsWith("/customer") && userRole !== "CUSTOMER") {
+    return redirectTo("/not-found")
+  }
+  if (pathname.startsWith("/technician") && userRole !== "TECHNICIAN") {
     return redirectTo("/not-found")
   }
   if (pathname.startsWith("/admin") && userRole !== "ADMIN") {
