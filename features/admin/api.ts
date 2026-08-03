@@ -37,3 +37,7 @@ export const createCategory = async (
   const res = await axiosInstance.post("/admin/categories", payload)
   return res.data.data
 }
+
+export const deleteCategory = async (id: string): Promise<void> => {
+  await axiosInstance.delete(`/admin/categories/${id}`)
+}
