@@ -8,6 +8,7 @@ import {
   getAdminCategories,
   getAllBookingsAdmin,
   getAllUsers,
+  unbanUser,
 } from "./api"
 import { CreateCategoryPayload } from "./types"
 
@@ -42,7 +43,7 @@ export const useBanUser = () => {
 export const useUnbanUser = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (id: string) => banUser(id),
+    mutationFn: (id: string) => unbanUser(id),
     onSuccess: () => {
       sileo.success({ title: "User unbanned" })
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] })
