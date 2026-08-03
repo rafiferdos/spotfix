@@ -12,7 +12,6 @@ import {
 import { useAuth, User } from "@/store/use-auth"
 import { Home, LayoutDashboard, LogOut } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { LogoutDialog } from "./logout-dialog"
 
@@ -27,8 +26,7 @@ export function UserMenu({
 }: {
   context?: "public" | "dashboard"
 }) {
-  const router = useRouter()
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
   if (!user) return null
