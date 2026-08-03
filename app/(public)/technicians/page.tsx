@@ -1,5 +1,6 @@
 "use client"
 
+import { FadeIn } from "@/components/fade-in"
 import { SkillsMultiSelect } from "@/components/skillsMultiSelect"
 import { TechnicianCard } from "@/components/technicianCard"
 import { Button } from "@/components/ui/button"
@@ -198,21 +199,10 @@ export default function TechniciansPage() {
                 className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
               >
                 <AnimatePresence mode="popLayout">
-                  {filteredTechnicians.map((tech) => (
-                    <motion.div
-                      key={tech.id}
-                      layout
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="show"
-                      exit={{
-                        opacity: 0,
-                        y: -12,
-                        transition: { duration: 0.2 },
-                      }}
-                    >
+                  {filteredTechnicians.map((tech, index) => (
+                    <FadeIn key={index} delay={index * 0.2}>
                       <TechnicianCard technician={tech} />
-                    </motion.div>
+                    </FadeIn>
                   ))}
                 </AnimatePresence>
               </motion.div>
