@@ -5,6 +5,7 @@ import { sileo } from "sileo"
 import {
   banUser,
   createCategory,
+  deleteCategory,
   getAdminCategories,
   getAllBookingsAdmin,
   getAllUsers,
@@ -69,6 +70,24 @@ export const useCreateCategory = () => {
     onError: (error: AxiosError<ErrorResponse>) => {
       sileo.error({
         title: "Failed to create category",
+        description: error.response?.data?.message || "Something went wrong.",
+      })
+    },
+  })
+}
+
+export const useDeleteCategory = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => deleteCategory(id),
+    onSuccess: () => {
+      sileo.success({ title: "Category deleted" })
+      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] })
+      queryClient.invalidateQueries({ queryKey: ["categories"] })
+    },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      sileo.error({
+        title: "Failed to delete category",
         description: error.response?.data?.message || "Something went wrong.",
       })
     },
