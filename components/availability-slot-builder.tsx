@@ -45,8 +45,8 @@ export function AvailabilitySlotBuilder({
   const [period, setPeriod] =
     useState<(typeof PERIODS)[number]["value"]>("Morning")
   const [customLabel, setCustomLabel] = useState("")
-  const [start, setStart] = useState(PERIODS[0].defaultStart)
-  const [end, setEnd] = useState(PERIODS[0].defaultEnd)
+  const [start, setStart] = useState<string>(PERIODS[0].defaultStart)
+  const [end, setEnd] = useState<string>(PERIODS[0].defaultEnd)
 
   const handlePeriodChange = (value: (typeof PERIODS)[number]["value"]) => {
     const next = PERIODS.find((p) => p.value === value)!
