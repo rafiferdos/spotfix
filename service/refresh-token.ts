@@ -87,7 +87,7 @@ export const isAccessTokenExist = async () => {
 
       cookieStore.set("accessToken", newAccessToken, {
         httpOnly: true,
-        maxAge: 60 * 60 * 24, // 1 day
+        maxAge: 15 * 60, // 15 minutes — matches backend accessToken cookie lifetime
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
       })
