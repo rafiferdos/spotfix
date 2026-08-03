@@ -1,6 +1,7 @@
 "use client"
 
 import { BookServiceDialog } from "@/components/book-service-dialog"
+import { FadeIn } from "@/components/fade-in"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -215,15 +216,8 @@ export default function ServicesPage() {
               className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
             >
               <AnimatePresence mode="popLayout">
-                {services.map((service) => (
-                  <motion.div
-                    key={service.id}
-                    layout
-                    variants={itemVariants}
-                    initial="hidden"
-                    animate="show"
-                    exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
-                  >
+                {services.map((service, index) => (
+                  <FadeIn key={index} delay={0.2 * index}>
                     <Card className="flex h-full flex-col">
                       <CardHeader>
                         <CardTitle>{service.title}</CardTitle>
@@ -275,7 +269,7 @@ export default function ServicesPage() {
                         ) : null}
                       </CardFooter>
                     </Card>
-                  </motion.div>
+                  </FadeIn>
                 ))}
               </AnimatePresence>
             </motion.div>
