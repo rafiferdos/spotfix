@@ -10,7 +10,7 @@ import {
 } from "@/features/technician-dashboard/hooks"
 import { Plus, X } from "lucide-react"
 import { motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 export default function TechnicianProfilePage() {
   const { data: profile, isLoading } = useMyTechnicianProfile()
@@ -20,14 +20,14 @@ export default function TechnicianProfilePage() {
   const [skillInput, setSkillInput] = useState("")
   const [experience, setExperience] = useState("")
   const [pricing, setPricing] = useState("")
+  const [loadedId, setLoadedId] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (profile) {
-      setSkills(profile.skills)
-      setExperience(String(profile.experience))
-      setPricing(String(profile.pricing))
-    }
-  }, [profile])
+  if (profile && profile.id !== loadedId) {
+    setLoadedId(profile.id)
+    setSkills(profile.skills)
+    setExperience(String(profile.experience))
+    setPricing(String(profile.pricing))
+  }
 
   const addSkill = () => {
     const value = skillInput.trim()
