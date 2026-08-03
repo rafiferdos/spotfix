@@ -4,7 +4,6 @@ import { Logo } from "@/assets/logo/logo"
 import { FacebookIcon } from "@/components/icons/facebook-icon"
 import { InstagramIcon } from "@/components/icons/instagram-icon"
 import { LinkedinIcon } from "@/components/icons/linkedin-icon"
-import { YoutubeIcon } from "@/components/icons/youtube-icon"
 import { cn } from "@/lib/utils"
 import { motion, useReducedMotion } from "motion/react"
 import Link from "next/link"
@@ -31,10 +30,21 @@ const footerLinks: FooterSection[] = [
   {
     label: "Follow Us",
     links: [
-      { title: "Facebook", href: "#", icon: <FacebookIcon /> },
-      { title: "Instagram", href: "#", icon: <InstagramIcon /> },
-      { title: "Youtube", href: "#", icon: <YoutubeIcon /> },
-      { title: "LinkedIn", href: "#", icon: <LinkedinIcon /> },
+      {
+        title: "Facebook",
+        href: "https://facebook.com/rafiferdos2",
+        icon: <FacebookIcon />,
+      },
+      {
+        title: "Instagram",
+        href: "https://instagram.com/rafiferdos",
+        icon: <InstagramIcon />,
+      },
+      {
+        title: "LinkedIn",
+        href: "https://linkedin.com/in/rafiferdos",
+        icon: <LinkedinIcon />,
+      },
     ],
   },
 ]
