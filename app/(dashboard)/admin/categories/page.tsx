@@ -93,39 +93,38 @@ export default function AdminCategoriesPage() {
         </p>
       )}
       {!isLoading && !isError && categories && categories.length > 0 && (
-        <FadeIn>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="flex items-start justify-between gap-3 rounded-2xl border bg-card p-4"
-              >
-                <div className="flex items-start gap-2">
-                  <FolderKanban className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  <div>
-                    <h3 className="font-medium">{cat.name}</h3>
-                    {cat.description && (
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {cat.description}
-                      </p>
-                    )}
-                  </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {categories.map((cat) => (
+            <FadeIn
+              delay={0.1 * categories.indexOf(cat)}
+              key={cat.id}
+              className="flex items-start justify-between gap-3 rounded-2xl border bg-card p-4"
+            >
+              <div className="flex items-start gap-2">
+                <FolderKanban className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <div>
+                  <h3 className="font-medium">{cat.name}</h3>
+                  {cat.description && (
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {cat.description}
+                    </p>
+                  )}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  className="shrink-0 text-destructive hover:bg-destructive/10"
-                  disabled={isDeleting}
-                  onClick={() =>
-                    confirm(`Delete "${cat.name}"?`) && remove(cat.id)
-                  }
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
               </div>
-            ))}
-          </div>
-        </FadeIn>
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                className="shrink-0 text-destructive hover:bg-destructive/10"
+                disabled={isDeleting}
+                onClick={() =>
+                  confirm(`Delete "${cat.name}"?`) && remove(cat.id)
+                }
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </FadeIn>
+          ))}
+        </div>
       )}
     </motion.div>
   )
