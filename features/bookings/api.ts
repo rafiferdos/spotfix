@@ -17,3 +17,8 @@ export const createBooking = async (
   const response = await axiosInstance.post("/bookings", payload)
   return response.data.data
 }
+
+export const cancelBooking = async (id: string): Promise<BookingType> => {
+  const response = await axiosInstance.patch(`/bookings/${id}/cancel`)
+  return response.data.data
+}
