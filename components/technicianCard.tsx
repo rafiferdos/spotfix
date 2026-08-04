@@ -57,9 +57,13 @@ export function TechnicianCard({ technician }: { technician: TechnicianType }) {
       </CardContent>
 
       <CardFooter>
-        <Link href={`/technicians/${technician.userId}`} className="w-full">
-          <Button className="w-full">View Profile</Button>
-        </Link>
+        <Button
+          render={<Link href={`/technicians/${technician.userId}`} />}
+          className="w-full"
+          nativeButton={false}
+        >
+          View Profile
+        </Button>
       </CardFooter>
     </Card>
   )
