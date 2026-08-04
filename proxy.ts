@@ -29,7 +29,9 @@ export async function proxy(request: NextRequest) {
       const { payload } = await jwtVerify(accessToken, accessSecret)
       userRole = payload.role as string
       isTokenValid = true
-    } catch {
+    } catch (err) {
+      console.error("[proxy] accessToken verify failed:", err)
+
       isTokenValid = false
     }
   }
