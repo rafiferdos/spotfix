@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { Eye } from "lucide-react"
+import { BookingStatusBadge } from "@/components/booking-status-badge"
 import {
   Dialog,
   DialogContent,
@@ -10,9 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { BookingStatusBadge } from "@/components/booking-status-badge"
 import { Spinner } from "@/components/ui/spinner"
 import { useBooking } from "@/features/bookings/hooks"
+import { Eye } from "lucide-react"
+import { useState } from "react"
 
 export function BookingDetailsDialog({ bookingId }: { bookingId: string }) {
   const [open, setOpen] = useState(false)
@@ -20,15 +20,17 @@ export function BookingDetailsDialog({ bookingId }: { bookingId: string }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <button
-          type="button"
-          className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
-          aria-label="View booking details"
-        >
-          <Eye className="h-4 w-4" />
-        </button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <button
+            type="button"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            aria-label="View booking details"
+          >
+            <Eye className="h-4 w-4" />
+          </button>
+        }
+      ></DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Booking Details</DialogTitle>
