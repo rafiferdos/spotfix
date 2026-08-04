@@ -39,11 +39,13 @@ export function LeaveReviewDialog({ bookingId }: { bookingId: string }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button variant="outline" className="w-full">
-          Leave a Review
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button variant="outline" className="w-full">
+            Leave a Review
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Rate your experience</DialogTitle>
