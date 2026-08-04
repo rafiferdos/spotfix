@@ -103,9 +103,7 @@ export default function TechnicianServicesPage() {
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger>
-            <Button>Add Service</Button>
-          </DialogTrigger>
+          <DialogTrigger render={<Button>Add Service</Button>} />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add a Service</DialogTitle>
