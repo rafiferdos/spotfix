@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { useCreateBooking } from "@/features/bookings/hooks"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { ReactElement, useState } from "react"
 
 interface BookServiceDialogProps {
   technicianId: string
@@ -51,7 +51,10 @@ export function BookServiceDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>{trigger}</DialogTrigger>
+      <DialogTrigger
+        className={"w-fit"}
+        render={trigger as ReactElement}
+      ></DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Book {serviceTitle}</DialogTitle>
