@@ -1,6 +1,7 @@
 // components/shadcn-space/blocks/navbar-01/navbar.tsx
 "use client"
 import { Logo } from "@/assets/logo/logo"
+import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import {
@@ -72,7 +73,9 @@ const Navbar = () => {
     <div>
       <header className="bg-background">
         <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6">
-          <nav
+          <RevealGroup
+            eager
+            as="nav"
             className={cn(
               "flex h-fit w-full items-center justify-between gap-3.5 transition-all duration-500 lg:gap-6",
               sticky
@@ -80,48 +83,66 @@ const Navbar = () => {
                 : "border-transparent bg-transparent"
             )}
           >
-            <Link href="/">
-              <Logo className="w-content h-5 md:h-12" />
-            </Link>
+            <Reveal>
+              <Link href="/">
+                <Logo className="w-content h-5 md:h-12" />
+              </Link>
+            </Reveal>
 
-            <NavigationMenu className="rounded-full bg-muted p-0.5 max-lg:hidden">
-              <NavigationMenuList className="flex gap-0">
-                {navigationData.map((navItem) => {
-                  const isActive = pathname === navItem.href
-                  return (
-                    <NavigationMenuItem key={navItem.title}>
-                      <Link
-                        href={navItem.href}
-                        aria-current={isActive ? "page" : undefined}
-                        className={cn(
-                          "block cursor-pointer rounded-full px-2 py-2 text-sm font-medium tracking-normal outline outline-transparent transition lg:px-4",
-                          isActive
-                            ? "bg-background text-foreground shadow-xs outline-border"
-                            : "text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-xs hover:outline-border"
-                        )}
-                      >
-                        {navItem.title}
-                      </Link>
-                    </NavigationMenuItem>
-                  )
-                })}
-              </NavigationMenuList>
-            </NavigationMenu>
+            <RevealGroup
+              eager
+              as="div"
+              className="rounded-full bg-muted p-0.5 max-lg:hidden"
+            >
+              <NavigationMenu>
+                <NavigationMenuList className="flex gap-0">
+                  {navigationData.map((navItem) => {
+                    const isActive = pathname === navItem.href
+                    return (
+                      <Reveal key={navItem.title}>
+                        <NavigationMenuItem>
+                          <Link
+                            href={navItem.href}
+                            aria-current={isActive ? "page" : undefined}
+                            className={cn(
+                              "block cursor-pointer rounded-full px-2 py-2 text-sm font-medium tracking-normal outline outline-transparent transition lg:px-4",
+                              isActive
+                                ? "bg-background text-foreground shadow-xs outline-border"
+                                : "text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-xs hover:outline-border"
+                            )}
+                          >
+                            {navItem.title}
+                          </Link>
+                        </NavigationMenuItem>
+                      </Reveal>
+                    )
+                  })}
+                </NavigationMenuList>
+              </NavigationMenu>
+            </RevealGroup>
 
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
+            <RevealGroup eager as="div" className="flex items-center gap-3">
+              <Reveal>
+                <ThemeToggle />
+              </Reveal>
 
               {isLoading ? (
-                <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
+                <Reveal>
+                  <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
+                </Reveal>
               ) : user ? (
-                <UserMenu context="public" />
+                <Reveal>
+                  <UserMenu context="public" />
+                </Reveal>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Button render={<Link href="/login" />} variant="ghost">
-                    Log In
-                  </Button>
-                  <CollaborateButton className="hidden lg:flex" />
-                </div>
+                <Reveal>
+                  <div className="flex items-center gap-2">
+                    <Button render={<Link href="/login" />} variant="ghost">
+                      Log In
+                    </Button>
+                    <CollaborateButton className="hidden lg:flex" />
+                  </div>
+                </Reveal>
               )}
 
               <div className="lg:hidden">
@@ -173,8 +194,8 @@ const Navbar = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            </div>
-          </nav>
+            </RevealGroup>
+          </RevealGroup>
         </div>
       </header>
     </div>
