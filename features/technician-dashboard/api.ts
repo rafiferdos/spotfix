@@ -1,7 +1,11 @@
 import { BookingStatus, BookingType } from "@/features/bookings/types"
 import { TechnicianProfileDetail } from "@/features/technicians/types"
 import { axiosInstance } from "@/lib/axios"
-import { AvailabilityPayload, TechnicianProfilePayload } from "./types"
+import {
+  AvailabilityPayload,
+  TechnicianEarningsSummary,
+  TechnicianProfilePayload,
+} from "./types"
 
 export const getMyTechnicianProfile = async (
   userId: string
@@ -42,3 +46,9 @@ export const updateTechnicianBookingStatus = async (
   })
   return res.data.data
 }
+
+export const getTechnicianEarnings =
+  async (): Promise<TechnicianEarningsSummary> => {
+    const res = await axiosInstance.get("/technician/earnings")
+    return res.data.data
+  }
