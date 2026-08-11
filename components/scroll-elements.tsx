@@ -27,7 +27,6 @@ export function ScrollElements() {
 
   // Detect scroll position
   useMotionValueEvent(scrollY, "change", (latest) => {
-    // স্ক্রল ২০০ পিক্সেল ক্রস করলে কম্পোনেন্টগুলো ভিজিবল হবে
     setIsVisible(latest > 200)
   })
 
@@ -40,15 +39,16 @@ export function ScrollElements() {
     <AnimatePresence>
       {isVisible && (
         <>
-          {/* 1. Floating Sticky Navbar (Pill Design) */}
+          {/* 1. Bottom Floating Navbar (Ultra Glassmorphism) */}
           <motion.div
-            initial={{ y: 50, opacity: 0 }} // নিচ থেকে আসার অ্যানিমেশন
+            initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -50, opacity: 0 }}
+            exit={{ y: 100, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed top-6 right-0 left-0 z-50 mx-auto w-fit"
+            className="fixed right-0 bottom-6 left-0 z-50 mx-auto w-fit sm:bottom-8"
           >
-            <nav className="flex items-center gap-2 rounded-full border border-border/50 bg-background/60 px-4 py-2 shadow-lg backdrop-blur-xl">
+            {/* Pure Glass Effect: High blur, low opacity bg, subtle border */}
+            <nav className="flex items-center gap-1.5 rounded-full border border-border/30 bg-background/20 px-3 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-2xl supports-backdrop-filter:bg-background/20 dark:border-white/10">
               {NAV_LINKS.map((link) => {
                 const isActive = pathname === link.href
                 return (
@@ -56,19 +56,19 @@ export function ScrollElements() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "relative px-4 py-1.5 text-sm font-medium transition-colors",
+                      "relative px-4 py-2 text-sm font-medium transition-colors",
                       isActive
                         ? "text-primary"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-foreground/70 hover:text-foreground"
                     )}
                   >
                     <span className="relative z-10">{link.title}</span>
 
-                    {/* Active State Fluid Background */}
+                    {/* Active Link Fluid Background */}
                     {isActive && (
                       <motion.div
-                        layoutId="active-nav-pill"
-                        className="absolute inset-0 z-0 rounded-full bg-primary/10"
+                        layoutId="bottom-nav-pill"
+                        className="absolute inset-0 z-0 rounded-full bg-primary/15 shadow-sm"
                         transition={{
                           type: "spring",
                           stiffness: 300,
@@ -91,14 +91,14 @@ export function ScrollElements() {
               type: "spring",
               stiffness: 300,
               damping: 25,
-              delay: 0.1, // একটু দেরিতে আসবে ন্যাভবারের পর
+              delay: 0.1,
             }}
-            className="fixed right-8 bottom-8 z-50"
+            className="fixed right-4 bottom-24 z-50 sm:right-8 sm:bottom-8"
           >
             <Button
               onClick={scrollToTop}
               size="icon"
-              className="h-12 w-12 rounded-full shadow-2xl transition-transform hover:scale-110 active:scale-95"
+              className="h-12 w-12 rounded-full border border-border/30 bg-background/40 text-foreground shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-2xl transition-all hover:scale-110 hover:bg-background/60 active:scale-95 dark:border-white/10"
             >
               <ArrowUp className="h-5 w-5" />
             </Button>
