@@ -31,3 +31,33 @@ export interface CreateCategoryPayload {
   name: string
   description: string
 }
+
+export interface AnalyticsOverview {
+  totalRevenue: number
+  totalUsers: number
+  totalCustomers: number
+  totalTechnicians: number
+  totalBookings: number
+  bookingsByStatus: { status: string; count: number }[]
+  revenueByMonth: { month: string; revenue: number }[]
+  topCategories: { name: string; count: number }[]
+}
+
+export interface ActivityItem {
+  id: string
+  type: "booking" | "payment" | "registration"
+  message: string
+  timestamp: string
+}
+
+export interface AdminReviewType {
+  id: string
+  rating: number
+  comment: string | null
+  createdAt: string
+  booking: {
+    service: { title: string }
+    customer: { name: string; email: string }
+    technician: { name: string; email: string }
+  }
+}
