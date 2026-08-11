@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { motion, useReducedMotion } from "motion/react"
 import Link from "next/link"
 import type { ReactNode } from "react"
+import { Reveal, RevealGroup } from "./motion/reveal"
 
 type FooterLink = { title: string; href: string; icon?: ReactNode }
 type FooterSection = { label: string; links: FooterLink[] }
@@ -51,7 +52,8 @@ const footerLinks: FooterSection[] = [
 
 export function Footer() {
   return (
-    <footer
+    <RevealGroup
+      eager
       className={cn(
         "md:rounded-t-6xl relative mx-auto flex w-full max-w-5xl flex-col items-center justify-center rounded-t-4xl border-t px-6 md:px-8",
         "dark:bg-[radial-gradient(35%_128px_at_50%_0%,--theme(--color-foreground/.1),transparent)]"
@@ -98,12 +100,12 @@ export function Footer() {
         </div>
       </div>
       <div className="h-px w-full bg-linear-to-r via-border" />
-      <div className="flex w-full items-center justify-center py-4">
+      <Reveal as="div" className="flex w-full items-center justify-center py-4">
         <p className="text-sm text-muted-foreground">
           &copy; {new Date().getFullYear()} Spotfix. All rights reserved.
         </p>
-      </div>
-    </footer>
+      </Reveal>
+    </RevealGroup>
   )
 }
 
