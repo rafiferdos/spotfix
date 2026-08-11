@@ -31,7 +31,7 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
     logout()
     sileo.success({ title: "Logged out", description: "See you again soon!" })
     onOpenChange(false)
-    router.push("/login")
+    router.push("/")
     router.refresh()
     setLoading(false)
   }
