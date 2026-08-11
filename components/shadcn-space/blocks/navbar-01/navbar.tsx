@@ -30,6 +30,7 @@ const navigationData: NavigationSection[] = [
   { title: "Home", href: "/" },
   { title: "Technicians", href: "/technicians" },
   { title: "Services", href: "/services" },
+  { title: "About", href: "/about" },
 ]
 
 const CollaborateButton = ({ className }: { className?: string }) => (
