@@ -6,6 +6,7 @@ import { sileo } from "sileo"
 import {
   getMyTechnicianProfile,
   getTechnicianBookings,
+  getTechnicianEarnings,
   updateTechnicianAvailability,
   updateTechnicianBookingStatus,
   upsertTechnicianProfile,
@@ -84,3 +85,9 @@ export const useUpdateBookingStatus = () => {
     },
   })
 }
+
+export const useTechnicianEarnings = () =>
+  useQuery({
+    queryKey: ["technician", "earnings"],
+    queryFn: getTechnicianEarnings,
+  })
