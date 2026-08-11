@@ -5,10 +5,14 @@ import { sileo } from "sileo"
 import {
   banUser,
   createCategory,
+  deleteAdminReview,
   deleteCategory,
   getAdminCategories,
+  getAdminReviews,
   getAllBookingsAdmin,
   getAllUsers,
+  getAnalyticsActivity,
+  getAnalyticsOverview,
   unbanUser,
 } from "./api"
 import { CreateCategoryPayload } from "./types"
@@ -88,6 +92,38 @@ export const useDeleteCategory = () => {
     onError: (error: AxiosError<ErrorResponse>) => {
       sileo.error({
         title: "Failed to delete category",
+        description: error.response?.data?.message || "Something went wrong.",
+      })
+    },
+  })
+}
+
+export const useAnalyticsOverview = () =>
+  useQuery({
+    queryKey: ["admin", "analytics", "overview"],
+    queryFn: getAnalyticsOverview,
+  })
+
+export const useAnalyticsActivity = () =>
+  useQuery({
+    queryKey: ["admin", "analytics", "activity"],
+    queryFn: getAnalyticsActivity,
+  })
+
+export const useAdminReviews = () =>
+  useQuery({ queryKey: ["admin", "reviews"], queryFn: getAdminReviews })
+
+export const useDeleteAdminReview = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => deleteAdminReview(id),
+    onSuccess: () => {
+      sileo.success({ title: "Review deleted" })
+      queryClient.invalidateQueries({ queryKey: ["admin", "reviews"] })
+    },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      sileo.error({
+        title: "Delete failed",
         description: error.response?.data?.message || "Something went wrong.",
       })
     },
