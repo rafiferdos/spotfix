@@ -15,8 +15,10 @@ import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
+import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { loginAction } from "@/service/auth-actions"
 import { useAuth } from "@/store/use-auth"
+import { ArrowBigLeftDash } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { sileo } from "sileo"
@@ -78,33 +80,49 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Login to Spotfix</CardTitle>
-          <CardDescription>
-            Fill in your credentials to access your account.
-          </CardDescription>
-          <CardAction>
-            <Link href="/register">
-              <Button variant="link">Sign Up</Button>
-            </Link>
-          </CardAction>
-        </CardHeader>
-
-        <CardContent>
-          <AuthForm form={form} onSubmit={onSubmit} fields={loginFields}>
-            <CardFooter className="mt-6 flex-col gap-2 p-0">
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={form.formState.isSubmitting}
-              >
-                {form.formState.isSubmitting ? "Logging in..." : "Login"}
+      <RevealGroup eager as="div" className="w-full max-w-md">
+        <Card>
+          <Reveal>
+            <CardHeader>
+              <CardTitle>Login to Spotfix</CardTitle>
+              <CardDescription>
+                Fill in your credentials to access your account.
+              </CardDescription>
+              <CardAction>
+                <Link href="/register">
+                  <Button variant="link">Sign Up</Button>
+                </Link>
+              </CardAction>
+            </CardHeader>
+          </Reveal>
+          <Reveal>
+            <CardContent>
+              <AuthForm form={form} onSubmit={onSubmit} fields={loginFields}>
+                <CardFooter className="mt-6 flex-col gap-2 p-0">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? "Logging in..." : "Login"}
+                  </Button>
+                </CardFooter>
+              </AuthForm>
+            </CardContent>
+            <div className="mt-8 flex justify-center">
+              <Button variant="ghost" size="sm">
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 text-muted-foreground"
+                >
+                  <ArrowBigLeftDash className="h-4 w-4" />
+                  Back to Home
+                </Link>
               </Button>
-            </CardFooter>
-          </AuthForm>
-        </CardContent>
-      </Card>
+            </div>
+          </Reveal>
+        </Card>
+      </RevealGroup>
     </div>
   )
 }
