@@ -1,9 +1,8 @@
-// components/shadcn-space/blocks/navbar-01/navbar.tsx
 "use client"
 import { Logo } from "@/assets/logo/logo"
 import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button" // Added buttonVariants
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,10 +32,12 @@ const navigationData: NavigationSection[] = [
   { title: "About", href: "/about" },
 ]
 
+// Replaced Button with native Link + buttonVariants to prevent React 19 render crashes
 const CollaborateButton = ({ className }: { className?: string }) => (
-  <Button
-    render={<Link href="/register" />}
+  <Link
+    href="/register"
     className={cn(
+      buttonVariants({ variant: "default" }),
       "group relative h-10 w-fit overflow-hidden rounded-full p-1 ps-4 pe-12 text-sm font-medium transition-all duration-500 hover:bg-primary/80 hover:ps-12 hover:pe-4",
       className
     )}
@@ -47,7 +48,7 @@ const CollaborateButton = ({ className }: { className?: string }) => (
     <div className="absolute right-1 flex h-8 w-8 items-center justify-center rounded-full bg-background text-foreground transition-all duration-500 group-hover:right-[calc(100%-36px)] group-hover:rotate-45">
       <ArrowUpRight size={16} />
     </div>
-  </Button>
+  </Link>
 )
 
 const Navbar = () => {
@@ -78,7 +79,7 @@ const Navbar = () => {
             eager
             as="nav"
             className={cn(
-              "flex h-fit w-full items-center justify-between gap-3.5 transition-all duration-500 lg:gap-6",
+              "relative flex h-fit w-full items-center justify-between gap-3.5 transition-all duration-500 lg:gap-6", // Added 'relative' here
               sticky
                 ? "rounded-full border border-border/40 bg-background/60 p-2.5 shadow-2xl shadow-primary/5 backdrop-blur-lg"
                 : "border-transparent bg-transparent"
@@ -90,10 +91,11 @@ const Navbar = () => {
               </Link>
             </Reveal>
 
+            {/* Added absolute positioning here for perfect centering */}
             <RevealGroup
               eager
               as="div"
-              className="rounded-full bg-muted p-0.5 max-lg:hidden"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted p-0.5 max-lg:hidden"
             >
               <NavigationMenu>
                 <NavigationMenuList className="flex gap-0">
@@ -138,9 +140,13 @@ const Navbar = () => {
               ) : (
                 <Reveal>
                   <div className="flex items-center gap-2">
-                    <Button render={<Link href="/login" />} variant="ghost">
+                    {/* Replaced Button render prop with native Link + buttonVariants */}
+                    <Link
+                      href="/login"
+                      className={buttonVariants({ variant: "ghost" })}
+                    >
                       Log In
-                    </Button>
+                    </Link>
                     <CollaborateButton className="hidden lg:flex" />
                   </div>
                 </Reveal>
