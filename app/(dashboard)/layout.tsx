@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import RoleGuard from "@/components/guards/role-guard"
+import { NotificationBell } from "@/components/notification-bell"
 import {
   SidebarInset,
   SidebarProvider,
@@ -25,6 +26,7 @@ export default function GlobalDashboardLayout({
         <SidebarInset>
           <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger className="-ml-1" />
+            <NotificationBell />
           </header>
           <div className="flex-1 overflow-y-auto">{children}</div>
         </SidebarInset>
