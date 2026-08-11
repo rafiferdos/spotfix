@@ -1,6 +1,7 @@
 "use client"
 
 import { FadeIn } from "@/components/fade-in"
+import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { SkillsMultiSelect } from "@/components/skillsMultiSelect"
 import { TechnicianCard } from "@/components/technicianCard"
 import { Button } from "@/components/ui/button"
@@ -102,9 +103,13 @@ export default function TechniciansPage() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
+      <RevealGroup
+        as="div"
+        eager
+        className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]"
+      >
         <aside className="h-fit rounded-2xl border bg-card p-5">
-          <div className="flex items-center justify-between">
+          <Reveal className="flex items-center justify-between">
             <h2 className="font-medium">Filters</h2>
             <Button
               variant="ghost"
@@ -113,9 +118,9 @@ export default function TechniciansPage() {
             >
               Reset
             </Button>
-          </div>
+          </Reveal>
 
-          <div className="mt-5 grid gap-2">
+          <Reveal className="mt-5 grid gap-2">
             <Label>Skills</Label>
             <Controller
               control={control}
@@ -128,18 +133,18 @@ export default function TechniciansPage() {
                 />
               )}
             />
-          </div>
+          </Reveal>
 
-          <div className="mt-5 grid gap-2">
+          <Reveal className="mt-5 grid gap-2">
             <Label htmlFor="location">Location</Label>
             <Input
               id="location"
               placeholder="e.g. Gulshan"
               {...register("location")}
             />
-          </div>
+          </Reveal>
 
-          <div className="mt-5 grid gap-2">
+          <Reveal className="mt-5 grid gap-2">
             <Label htmlFor="rating">Minimum rating</Label>
             <Controller
               control={control}
@@ -164,10 +169,10 @@ export default function TechniciansPage() {
                 </Select>
               )}
             />
-          </div>
+          </Reveal>
         </aside>
 
-        <div>
+        <Reveal as="div">
           {isLoading && (
             <div className="flex h-60 items-center justify-center">
               <Spinner />
@@ -207,8 +212,8 @@ export default function TechniciansPage() {
                 </AnimatePresence>
               </motion.div>
             )}
-        </div>
-      </div>
+        </Reveal>
+      </RevealGroup>
     </div>
   )
 }
