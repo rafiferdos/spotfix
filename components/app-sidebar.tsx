@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useAuth, User } from "@/store/use-auth"
 import {
+  Bell,
   Briefcase,
   Calendar,
   CalendarClock,
@@ -26,6 +27,8 @@ import {
   LayoutDashboard,
   LogOut,
   Search,
+  Star,
+  TrendingUp,
   UserRound,
   Users,
   Wrench,
@@ -42,10 +45,13 @@ const NAV_ITEMS: Record<
     { title: "Home", href: "/customer", icon: LayoutDashboard },
     { title: "Browse Services", href: "/services", icon: Search },
     { title: "Technicians", href: "/technicians", icon: Wrench },
+    { title: "Notifications", href: "/customer/notifications", icon: Bell },
+    { title: "My Reviews", href: "/customer/reviews", icon: Star },
+    { title: "Profile", href: "/profile", icon: UserRound },
   ],
   TECHNICIAN: [
     { title: "Home", href: "/technician", icon: LayoutDashboard },
-    { title: "Profile", href: "/technician/profile", icon: UserRound },
+    { title: "Craft Profile", href: "/technician/profile", icon: UserRound },
     { title: "Services", href: "/technician/services", icon: Wrench },
     {
       title: "Schedule",
@@ -53,12 +59,17 @@ const NAV_ITEMS: Record<
       icon: CalendarClock,
     },
     { title: "Jobs", href: "/technician/bookings", icon: Briefcase },
+    { title: "Earnings", href: "/technician/earnings", icon: TrendingUp },
+    { title: "Reviews", href: "/technician/reviews", icon: Star },
+    { title: "Account", href: "/profile", icon: UserRound },
   ],
   ADMIN: [
     { title: "Home", href: "/admin", icon: LayoutDashboard },
     { title: "People", href: "/admin/users", icon: Users },
     { title: "Bookings", href: "/admin/bookings", icon: Calendar },
     { title: "Catalog", href: "/admin/categories", icon: FolderKanban },
+    { title: "Analytics", href: "/admin/analytics", icon: TrendingUp },
+    { title: "Profile", href: "/profile", icon: UserRound },
   ],
 }
 
