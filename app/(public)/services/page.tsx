@@ -2,6 +2,7 @@
 
 import { BookServiceDialog } from "@/components/book-service-dialog"
 import { FadeIn } from "@/components/fade-in"
+import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -97,17 +98,21 @@ export default function ServicesPage() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
+      <RevealGroup
+        as="div"
+        eager
+        className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]"
+      >
         {/* Filters */}
         <aside className="h-fit rounded-2xl border bg-card p-5">
-          <div className="flex items-center justify-between">
+          <Reveal as="div" className="flex items-center justify-between">
             <h2 className="font-medium">Filters</h2>
             <Button variant="ghost" size="sm" onClick={() => reset()}>
               Reset
             </Button>
-          </div>
+          </Reveal>
 
-          <div className="mt-5 grid gap-2">
+          <Reveal as="div" className="mt-5 grid gap-2">
             <Label htmlFor="search">Search</Label>
             <div className="relative">
               <Search className="pointer-events-none absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -118,9 +123,9 @@ export default function ServicesPage() {
                 {...register("search")}
               />
             </div>
-          </div>
+          </Reveal>
 
-          <div className="mt-5 grid gap-2">
+          <Reveal as="div" className="mt-5 grid gap-2">
             <Label htmlFor="category">Category</Label>
             <Controller
               control={control}
@@ -147,18 +152,18 @@ export default function ServicesPage() {
                 </Select>
               )}
             />
-          </div>
+          </Reveal>
 
-          <div className="mt-5 grid gap-2">
+          <Reveal as="div" className="mt-5 grid gap-2">
             <Label htmlFor="location">Location</Label>
             <Input
               id="location"
               placeholder="e.g. Dhanmondi"
               {...register("location")}
             />
-          </div>
+          </Reveal>
 
-          <div className="mt-5 grid gap-2">
+          <Reveal as="div" className="mt-5 grid gap-2">
             <Label htmlFor="rating">Minimum rating</Label>
             <Controller
               control={control}
@@ -183,11 +188,11 @@ export default function ServicesPage() {
                 </Select>
               )}
             />
-          </div>
+          </Reveal>
         </aside>
 
         {/* Results */}
-        <div>
+        <Reveal as="div">
           {isLoading && (
             <div className="flex h-60 items-center justify-center">
               <Spinner />
@@ -274,8 +279,8 @@ export default function ServicesPage() {
               </AnimatePresence>
             </motion.div>
           )}
-        </div>
-      </div>
+        </Reveal>
+      </RevealGroup>
     </div>
   )
 }
