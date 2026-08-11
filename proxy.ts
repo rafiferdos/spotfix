@@ -10,6 +10,7 @@ const PUBLIC_ROUTES = [
   "/technicians",
   "/payment/success",
   "/payment/cancel",
+  "/about",
 ]
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
