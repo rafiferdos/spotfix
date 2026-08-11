@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/motion/reveal"
+import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { Button } from "@/components/ui/button"
 import { Mail, Terminal, Wrench } from "lucide-react"
 import Image from "next/image"
@@ -10,7 +10,11 @@ import { HugeiconsIcon } from "@hugeicons/react"
 
 export default function AboutPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6 py-24 sm:px-12">
+    <RevealGroup
+      as="div"
+      eager
+      className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center px-6"
+    >
       <div className="mx-auto w-full max-w-5xl">
         {/* Header Section */}
         <Reveal className="mb-16 text-center">
@@ -99,6 +103,6 @@ export default function AboutPage() {
           </Reveal>
         </div>
       </div>
-    </div>
+    </RevealGroup>
   )
 }
