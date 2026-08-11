@@ -19,6 +19,7 @@ const footerLinks: FooterSection[] = [
     links: [
       { title: "Browse Services", href: "/services" },
       { title: "Find Technicians", href: "/technicians" },
+      { title: "Privacy & Terms", href: "/privacy" },
     ],
   },
   {
