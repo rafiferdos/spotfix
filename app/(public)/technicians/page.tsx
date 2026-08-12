@@ -2,6 +2,7 @@
 
 import { FadeIn } from "@/components/fade-in"
 import { Reveal, RevealGroup } from "@/components/motion/reveal"
+import { CardGridSkeleton } from "@/components/skeletons/card-grid-skeleton"
 import { SkillsMultiSelect } from "@/components/skillsMultiSelect"
 import { TechnicianCard } from "@/components/technicianCard"
 import { Button } from "@/components/ui/button"
@@ -14,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Spinner } from "@/components/ui/spinner"
 import { useTechnicians } from "@/features/technicians/hooks"
 import { useDebouncedValue } from "@/hooks/useDebouncedValue"
 import { AlertCircle, Users } from "lucide-react"
@@ -174,9 +174,9 @@ export default function TechniciansPage() {
 
         <Reveal as="div">
           {isLoading && (
-            <div className="flex h-60 items-center justify-center">
-              <Spinner />
-            </div>
+            <>
+              <CardGridSkeleton count={6} />
+            </>
           )}
 
           {isError && (
