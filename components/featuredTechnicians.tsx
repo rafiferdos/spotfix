@@ -4,7 +4,7 @@ import { TechnicianCard } from "@/components/technicianCard"
 import { useTechnicians } from "@/features/technicians/hooks"
 import { AlertCircle } from "lucide-react"
 import { motion } from "motion/react"
-import { Spinner } from "./ui/spinner"
+import { CardGridSkeleton } from "./skeletons/card-grid-skeleton"
 
 const FeaturedTechnicians = () => {
   const {
@@ -42,8 +42,8 @@ const FeaturedTechnicians = () => {
       </motion.p>
 
       {isLoading && (
-        <div className="mt-20 flex h-40 items-center justify-center">
-          <Spinner />
+        <div className="py-8 md:py-18">
+          <CardGridSkeleton count={6} />
         </div>
       )}
 
