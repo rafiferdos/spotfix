@@ -3,6 +3,7 @@
 import { BookServiceDialog } from "@/components/book-service-dialog"
 import { FadeIn } from "@/components/fade-in"
 import { Reveal, RevealGroup } from "@/components/motion/reveal"
+import { PaginationControls } from "@/components/pagination-control"
 import { CardGridSkeleton } from "@/components/skeletons/card-grid-skeleton"
 import { Button } from "@/components/ui/button"
 import {
@@ -29,7 +30,7 @@ import { useAuth } from "@/store/use-auth"
 import { AlertCircle, Search, Wrench } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 
 const RATING_OPTIONS = ["5", "4", "3", "2", "1"]
@@ -56,6 +57,8 @@ const itemVariants = {
 }
 
 export default function ServicesPage() {
+  const [page, setPage] = useState(1)
+
   const { user } = useAuth()
   const { control, register, watch, reset } = useForm<ServicesFilterForm>({
     defaultValues: { search: "", categoryId: "", location: "", rating: "" },
@@ -72,15 +75,17 @@ export default function ServicesPage() {
   const debouncedLocation = useDebouncedValue(location, 400)
 
   const params = useMemo(() => {
-    const p: Record<string, string | number> = {}
+    const p: Record<string, string | number> = { page, limit: 9 }
     if (debouncedSearch.trim()) p.search = debouncedSearch.trim()
     if (categoryId) p.categoryId = categoryId
     if (debouncedLocation.trim()) p.location = debouncedLocation.trim()
     if (rating) p.rating = Number(rating)
     return p
-  }, [debouncedSearch, categoryId, debouncedLocation, rating])
+  }, [page, debouncedSearch, categoryId, debouncedLocation, rating])
 
-  const { data: services, isLoading, isError } = useServices(params)
+  const { data, isLoading, isError } = useServices(params)
+  const services = data?.data
+  const meta = data?.meta
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
@@ -107,7 +112,14 @@ export default function ServicesPage() {
         <aside className="h-fit rounded-2xl border bg-card p-5">
           <Reveal as="div" className="flex items-center justify-between">
             <h2 className="font-medium">Filters</h2>
-            <Button variant="ghost" size="sm" onClick={() => reset()}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                reset()
+                setPage(1)
+              }}
+            >
               Reset
             </Button>
           </Reveal>
@@ -214,70 +226,79 @@ export default function ServicesPage() {
           )}
 
           {!isLoading && !isError && services && services.length > 0 && (
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              <AnimatePresence mode="popLayout">
-                {services.map((service, index) => (
-                  <FadeIn key={index} delay={0.2 * index}>
-                    <Card className="flex h-full flex-col">
-                      <CardHeader>
-                        <CardTitle>{service.title}</CardTitle>
-                        <CardDescription className="line-clamp-2">
-                          {service.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="flex-1">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
-                            {service.category.name}
-                          </span>
-                          <span className="font-medium text-primary">
-                            ৳{service.price}
-                          </span>
-                        </div>
-                        <p className="mt-3 text-sm text-muted-foreground">
-                          By {service.technician.name}
-                          {service.technician.address
-                            ? ` · ${service.technician.address}`
-                            : ""}
-                        </p>
-                      </CardContent>
-                      <CardFooter className="flex gap-2">
-                        <Link
-                          href={`/technicians/${service.technicianId}`}
-                          className="flex-1"
-                        >
-                          <Button variant="outline" className="w-full">
-                            View Technician
-                          </Button>
-                        </Link>
-                        {!user ? (
+            <>
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
+              >
+                <AnimatePresence mode="popLayout">
+                  {services.map((service, index) => (
+                    <FadeIn key={index} delay={0.2 * index}>
+                      <Card className="flex h-full flex-col">
+                        <CardHeader>
+                          <CardTitle>{service.title}</CardTitle>
+                          <CardDescription className="line-clamp-2">
+                            {service.description}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex-1">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
+                              {service.category.name}
+                            </span>
+                            <span className="font-medium text-primary">
+                              ৳{service.price}
+                            </span>
+                          </div>
+                          <p className="mt-3 text-sm text-muted-foreground">
+                            By {service.technician.name}
+                            {service.technician.address
+                              ? ` · ${service.technician.address}`
+                              : ""}
+                          </p>
+                        </CardContent>
+                        <CardFooter className="flex gap-2">
                           <Link
-                            href="/login?redirectTo=/services"
+                            href={`/technicians/${service.technicianId}`}
                             className="flex-1"
                           >
-                            <Button className="w-full">Login to Book</Button>
+                            <Button variant="outline" className="w-full">
+                              View Technician
+                            </Button>
                           </Link>
-                        ) : user.role === "CUSTOMER" ? (
-                          <BookServiceDialog
-                            technicianId={service.technicianId}
-                            serviceId={service.id}
-                            serviceTitle={service.title}
-                            trigger={
-                              <Button className="w-full">Book Now</Button>
-                            }
-                          />
-                        ) : null}
-                      </CardFooter>
-                    </Card>
-                  </FadeIn>
-                ))}
-              </AnimatePresence>
-            </motion.div>
+                          {!user ? (
+                            <Link
+                              href="/login?redirectTo=/services"
+                              className="flex-1"
+                            >
+                              <Button className="w-full">Login to Book</Button>
+                            </Link>
+                          ) : user.role === "CUSTOMER" ? (
+                            <BookServiceDialog
+                              technicianId={service.technicianId}
+                              serviceId={service.id}
+                              serviceTitle={service.title}
+                              trigger={
+                                <Button className="w-full">Book Now</Button>
+                              }
+                            />
+                          ) : null}
+                        </CardFooter>
+                      </Card>
+                    </FadeIn>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+              {meta && (
+                <PaginationControls
+                  page={meta.page}
+                  totalPages={meta.totalPages}
+                  onPageChange={setPage}
+                />
+              )}
+            </>
           )}
         </Reveal>
       </RevealGroup>
