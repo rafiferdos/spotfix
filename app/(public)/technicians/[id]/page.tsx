@@ -85,25 +85,10 @@ export default function TechnicianProfilePage({
         ).toFixed(1)
       : null
 
-  type TechnicianService = {
-    id: string
-    title: string
-    description: string
-    price: number
-    technicianId: string
-  }
-
-  const allServicesList: TechnicianService[] = Array.isArray(allServices)
-    ? (allServices as TechnicianService[])
-    : Array.isArray(
-          (allServices as unknown as { items?: TechnicianService[] } | null)
-            ?.items
-        )
-      ? (allServices as unknown as { items: TechnicianService[] }).items
-      : []
-
-  const technicianServices = allServicesList.filter(
-    (service) => service.technicianId === id
+  const technicianServices = allServices?.data?.filter((service) =>
+    technician.user.technician.some(
+      (booking) => booking.service.id === service.id
+    )
   )
 
   return (
