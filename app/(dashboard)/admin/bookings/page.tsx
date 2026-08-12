@@ -1,6 +1,6 @@
 "use client"
 
-import { Spinner } from "@/components/ui/spinner"
+import { TableSkeleton } from "@/components/skeletons/table-skeleton"
 import {
   Table,
   TableBody,
@@ -31,9 +31,9 @@ export default function AdminBookingsPage() {
       </div>
 
       {isLoading && (
-        <div className="flex h-40 items-center justify-center">
-          <Spinner />
-        </div>
+        <>
+          <TableSkeleton rows={5} cols={5} />
+        </>
       )}
       {isError && (
         <div className="flex h-40 items-center justify-center gap-2 text-destructive">
