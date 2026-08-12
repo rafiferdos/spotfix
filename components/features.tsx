@@ -59,7 +59,7 @@ const Features = () => {
       {/* Data Grid */}
       {!isLoading && !isError && (
         <div className="mt-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services?.map((service: ServiceType) => (
+          {(services?.data ?? []).map((service: ServiceType) => (
             <div
               className="relative flex flex-col overflow-hidden rounded-xl border bg-card p-6 dark:border-card-foreground/7"
               key={service.id}
@@ -81,7 +81,7 @@ const Features = () => {
               <div className="z-10 mt-6 flex items-center justify-between border-t pt-4 text-sm font-medium dark:border-card-foreground/10">
                 <span className="text-base text-primary">৳{service.price}</span>
                 <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
-                  {service.category.name}
+                  {service.category?.name ?? "General"}
                 </span>
               </div>
 
