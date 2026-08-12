@@ -2,8 +2,8 @@ export interface TechnicianUser {
   name: string
   address: string | null
   email: string
+  profileImage: string | null
 }
-
 export interface TechnicianType {
   id: string
   userId: string
