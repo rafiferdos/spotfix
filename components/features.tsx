@@ -4,7 +4,7 @@ import { useServices } from "@/features/services/hooks"
 import { ServiceType } from "@/features/services/types"
 import { AlertCircle, Wrench } from "lucide-react"
 import { motion } from "motion/react"
-import { Spinner } from "./ui/spinner"
+import { CardGridSkeleton } from "./skeletons/card-grid-skeleton"
 
 const Features = () => {
   // Fetching top-rated services with query parameters
@@ -43,8 +43,8 @@ const Features = () => {
 
       {/* Loading State */}
       {isLoading && (
-        <div className="mt-20 flex h-40 items-center justify-center">
-          <Spinner />
+        <div className="py-8 md:py-18">
+          <CardGridSkeleton count={6} />
         </div>
       )}
 
