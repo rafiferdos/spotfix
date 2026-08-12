@@ -33,6 +33,7 @@ import {
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { UserAvatar } from "./user-avatar"
 
 const NAV_ITEMS: Record<
   User["role"],
@@ -129,12 +130,11 @@ export function AppSidebar() {
 
         <div className="flex items-center gap-2 px-2 py-1.5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-            {user.name
-              .split(" ")
-              .map((n) => n[0])
-              .slice(0, 2)
-              .join("")
-              .toUpperCase()}
+            <UserAvatar
+              src={user.profileImage}
+              name={user.name}
+              className="h-9 w-9 text-sm"
+            />
           </div>
           <div className="flex min-w-0 flex-col group-data-[collapsible=icon]:hidden">
             <span className="truncate text-sm font-medium">{user.name}</span>
