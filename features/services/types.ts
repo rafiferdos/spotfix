@@ -5,6 +5,7 @@ export interface ServiceCategory {
 export interface ServiceTechnician {
   name: string
   address: string | null
+  profileImage: string | null
 }
 
 export interface ServiceType {
