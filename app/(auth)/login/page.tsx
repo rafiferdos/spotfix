@@ -118,6 +118,18 @@ export default function LoginPage() {
                 <GoogleSignInButton />
               </div>
             </CardContent>
+            <div className="mt-4 flex justify-center">
+              <button
+                type="button"
+                onClick={() => {
+                  form.setValue("email", "demo.customer@gmail.com")
+                  form.setValue("password", "iamalone3r")
+                }}
+                className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              >
+                Try a demo account
+              </button>
+            </div>
             <div className="mt-8 flex justify-center">
               <Button variant="ghost" size="sm">
                 <Link
