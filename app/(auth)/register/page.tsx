@@ -51,6 +51,7 @@ export default function RegisterPage() {
       phone: "",
       address: "",
       role: USER_ROLES.CUSTOMER,
+      agreeToTerms: false,
     },
   })
 
@@ -188,6 +189,39 @@ export default function RegisterPage() {
                       </p>
                     )}
                   </Reveal>
+                  <Reveal as="div" className="mt-4 flex items-start gap-2">
+                    <Controller
+                      control={form.control}
+                      name="agreeToTerms"
+                      render={({ field }) => (
+                        <input
+                          type="checkbox"
+                          id="agreeToTerms"
+                          checked={field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                          className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                        />
+                      )}
+                    />
+                    <label
+                      htmlFor="agreeToTerms"
+                      className="text-sm text-muted-foreground"
+                    >
+                      I agree to the{" "}
+                      <Link
+                        href="/privacy"
+                        target="_blank"
+                        className="text-foreground underline underline-offset-4 hover:text-primary"
+                      >
+                        Terms & Privacy Policy
+                      </Link>
+                    </label>
+                  </Reveal>
+                  {form.formState.errors.agreeToTerms && (
+                    <p className="text-sm font-medium text-red-500">
+                      {form.formState.errors.agreeToTerms.message}
+                    </p>
+                  )}
                   <Reveal>
                     <CardFooter className="mt-6 flex-col gap-2 p-0">
                       <Button
