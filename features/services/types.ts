@@ -27,3 +27,8 @@ export interface CreateServicePayload {
   technicianId: string
   categoryId: string
 }
+
+export interface PaginatedServices {
+  data: ServiceType[]
+  meta: { page: number; limit: number; total: number; totalPages: number }
+}
