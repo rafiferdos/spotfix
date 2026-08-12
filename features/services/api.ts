@@ -1,12 +1,11 @@
 import { axiosInstance } from "@/lib/axios"
-import { CreateServicePayload, ServiceType } from "./types"
+import { CreateServicePayload, PaginatedServices } from "./types"
 
 export const getServices = async (
   params?: Record<string, string | number | boolean>
-): Promise<ServiceType[]> => {
+): Promise<PaginatedServices> => {
   const response = await axiosInstance.get("/services", { params })
-
-  return response.data.data
+  return { data: response.data.data, meta: response.data.meta }
 }
 
 export const createService = async (payload: CreateServicePayload) => {
