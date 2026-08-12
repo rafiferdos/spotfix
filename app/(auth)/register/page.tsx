@@ -227,7 +227,10 @@ export default function RegisterPage() {
                       <Button
                         type="submit"
                         className="w-full"
-                        disabled={form.formState.isSubmitting}
+                        disabled={
+                          form.formState.isSubmitting ||
+                          !form.watch("agreeToTerms")
+                        }
                       >
                         {form.formState.isSubmitting
                           ? "Creating account..."
