@@ -14,6 +14,7 @@ import { Home, LayoutDashboard, LogOut } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { LogoutDialog } from "./logout-dialog"
+import { UserAvatar } from "./user-avatar"
 
 const ROLE_DASHBOARD_PATH: Record<User["role"], string> = {
   ADMIN: "/admin",
@@ -41,8 +42,12 @@ export function UserMenu({
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary transition outline-none hover:bg-primary/20">
-          {initials}
+        <DropdownMenuTrigger className="flex h-9 w-9 cursor-pointer items-center justify-center overflow-hidden rounded-full text-sm font-semibold transition outline-none hover:opacity-80">
+          <UserAvatar
+            src={user.profileImage}
+            name={user.name}
+            className="h-9 w-9 text-sm"
+          />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuGroup>
