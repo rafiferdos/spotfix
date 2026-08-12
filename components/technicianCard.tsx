@@ -6,6 +6,7 @@ import Link from "next/link"
 import { UserAvatar } from "./user-avatar"
 
 export function TechnicianCard({ technician }: { technician: TechnicianType }) {
+  console.log(technician.user.profileImage)
   return (
     <Card className="overflow-hidden">
       <CardHeader>
