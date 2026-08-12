@@ -3,6 +3,7 @@
 import { BookServiceDialog } from "@/components/book-service-dialog"
 import { FadeIn } from "@/components/fade-in"
 import { Reveal, RevealGroup } from "@/components/motion/reveal"
+import { CardGridSkeleton } from "@/components/skeletons/card-grid-skeleton"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -21,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Spinner } from "@/components/ui/spinner"
 import { useCategories } from "@/features/categories/hooks"
 import { useServices } from "@/features/services/hooks"
 import { useDebouncedValue } from "@/hooks/useDebouncedValue"
@@ -194,9 +194,9 @@ export default function ServicesPage() {
         {/* Results */}
         <Reveal as="div">
           {isLoading && (
-            <div className="flex h-60 items-center justify-center">
-              <Spinner />
-            </div>
+            <>
+              <CardGridSkeleton count={6} />
+            </>
           )}
 
           {isError && (
