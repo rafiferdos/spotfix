@@ -88,7 +88,7 @@ const Navbar = () => {
           >
             <Reveal>
               <Link href="/">
-                <Image height={150} width={150} src={Logo} alt="Spotfix Logo" className="h-16 w-16" />
+                <Image height={150} width={150} src={Logo} alt="Spotfix Logo" className="h-9 w-9 md:h-16 md:w-16" />
               </Link>
             </Reveal>
 
