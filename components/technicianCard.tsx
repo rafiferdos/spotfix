@@ -8,7 +8,7 @@ import { UserAvatar } from "./user-avatar"
 export function TechnicianCard({ technician }: { technician: TechnicianType }) {
   console.log(technician.user.profileImage)
   return (
-    <Card className="overflow-hidden">
+    <Card className="flex h-full flex-col overflow-hidden">
       <CardHeader>
         <div className="flex items-center gap-3">
           <UserAvatar
@@ -30,7 +30,7 @@ export function TechnicianCard({ technician }: { technician: TechnicianType }) {
         </div>
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-1 flex-col justify-between gap-3">
         <div className="flex flex-wrap gap-1.5">
           {technician.skills.slice(0, 4).map((skill) => (
             <span
@@ -53,7 +53,7 @@ export function TechnicianCard({ technician }: { technician: TechnicianType }) {
         </div>
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="pt-0">
         <Button
           render={<Link href={`/technicians/${technician.userId}`} />}
           className="w-full"
