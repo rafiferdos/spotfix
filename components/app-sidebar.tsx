@@ -1,6 +1,6 @@
 "use client"
 
-import { Logo } from "@/assets/logo/logo"
+import Logo from "@/assets/logo/spotfix.png"
 import { LogoutDialog } from "@/components/logout-dialog"
 import { ThemeToggle } from "@/components/theme-toggle"
 import {
@@ -30,6 +30,7 @@ import {
   Users,
   Wrench,
 } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -79,7 +80,15 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link href="/" className="flex items-center px-2 py-1">
-          <Logo className="mx-auto h-5 w-auto md:h-16" />
+          <div className="mx-auto rounded-3xl bg-primary/10 p-7 dark:bg-primary/20">
+            <Image
+              src={Logo}
+              alt="Spotfix Logo"
+              width={32}
+              height={32}
+              className="mr-2"
+            />
+          </div>
         </Link>
       </SidebarHeader>
 

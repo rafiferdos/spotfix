@@ -1,5 +1,5 @@
 "use client"
-import { Logo } from "@/assets/logo/logo"
+import Logo from '@/assets/logo/spotfix.png'
 import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button" // Added buttonVariants
@@ -19,6 +19,7 @@ import { UserMenu } from "@/components/user-menu"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/store/use-auth"
 import { ArrowUpRight, TextAlignJustify } from "lucide-react"
+import Image from 'next/image'
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
@@ -87,7 +88,7 @@ const Navbar = () => {
           >
             <Reveal>
               <Link href="/">
-                <Logo className="w-content h-5 md:h-12" />
+                <Image height={150} width={150} src={Logo} alt="Spotfix Logo" className="h-16 w-16" />
               </Link>
             </Reveal>
 

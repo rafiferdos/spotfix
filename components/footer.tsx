@@ -1,6 +1,6 @@
 // components/footer.tsx
 "use client"
-import { Logo } from "@/assets/logo/logo"
+import Logo from "@/assets/logo/spotfix.png"
 import { FacebookIcon } from "@/components/icons/facebook-icon"
 import { InstagramIcon } from "@/components/icons/instagram-icon"
 import { LinkedinIcon } from "@/components/icons/linkedin-icon"
@@ -9,6 +9,7 @@ import { motion, useReducedMotion } from "motion/react"
 import Link from "next/link"
 import type { ReactNode } from "react"
 import { Reveal, RevealGroup } from "./motion/reveal"
+import Image from "next/image"
 
 type FooterLink = { title: string; href: string; icon?: ReactNode }
 type FooterSection = { label: string; links: FooterLink[] }
@@ -63,7 +64,7 @@ export function Footer() {
       <div className="absolute top-0 right-1/2 left-1/2 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/20 blur" />
       <div className="grid w-full gap-8 py-6 md:py-8 lg:grid-cols-3 lg:gap-8">
         <AnimatedContainer className="space-y-4">
-          <Logo className="h-4 md:h-16" />
+          <Image src={Logo} alt="Spotfix Logo" className="h-10 w-auto" />
           <p className="mt-8 text-sm text-muted-foreground md:mt-0">
             Book trusted, verified home service professionals in minutes.
           </p>
