@@ -44,6 +44,7 @@ export interface TechnicianProfileDetail {
     name: string
     email: string
     phone: string | null
+    profileImage: string | null
     technician: TechnicianBookingItem[]
   }
 }

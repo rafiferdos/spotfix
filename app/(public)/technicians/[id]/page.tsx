@@ -4,6 +4,7 @@ import { BookServiceDialog } from "@/components/book-service-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
+import { UserAvatar } from "@/components/user-avatar"
 import { useServices } from "@/features/services/hooks"
 import { useTechnician } from "@/features/technicians/hooks"
 import { useAuth } from "@/store/use-auth"
@@ -84,14 +85,26 @@ export default function TechnicianProfilePage({
         ).toFixed(1)
       : null
 
-  const initials = technician.user.name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase()
+  type TechnicianService = {
+    id: string
+    title: string
+    description: string
+    price: number
+    technicianId: string
+  }
 
-  const technicianServices = allServices?.filter((s) => s.technicianId === id)
+  const allServicesList: TechnicianService[] = Array.isArray(allServices)
+    ? (allServices as TechnicianService[])
+    : Array.isArray(
+          (allServices as unknown as { items?: TechnicianService[] } | null)
+            ?.items
+        )
+      ? (allServices as unknown as { items: TechnicianService[] }).items
+      : []
+
+  const technicianServices = allServicesList.filter(
+    (service) => service.technicianId === id
+  )
 
   return (
     <motion.div
@@ -103,9 +116,11 @@ export default function TechnicianProfilePage({
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]">
         <div>
           <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xl font-semibold text-primary">
-              {initials}
-            </div>
+            <UserAvatar
+              src={technician.user.profileImage}
+              name={technician.user.name}
+              className="h-16 w-16 text-xl"
+            />
             <div>
               <h1 className="text-2xl font-medium tracking-[-0.02em]">
                 {technician.user.name}
