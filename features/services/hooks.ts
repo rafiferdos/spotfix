@@ -14,6 +14,7 @@ export const useServices = (
   return useQuery({
     queryKey: ["services", params],
     queryFn: () => getServices(params),
+    placeholderData: (prev) => prev,
   })
 }
 
