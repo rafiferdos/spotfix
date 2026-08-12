@@ -1,5 +1,6 @@
 "use client"
 
+import { PaginationControls } from "@/components/pagination-control"
 import { TableSkeleton } from "@/components/skeletons/table-skeleton"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,9 +15,13 @@ import { useAdminUsers, useBanUser, useUnbanUser } from "@/features/admin/hooks"
 import { cn } from "@/lib/utils"
 import { AlertCircle, Ban } from "lucide-react"
 import { motion } from "motion/react"
+import { useState } from "react"
 
 export default function AdminUsersPage() {
-  const { data: users, isLoading, isError } = useAdminUsers()
+  const [page, setPage] = useState(1)
+  const { data, isLoading, isError } = useAdminUsers(page)
+  const users = data?.data
+  const meta = data?.meta
   const { mutate: ban, isPending: isBanning } = useBanUser()
   const { mutate: unban, isPending: isUnbanning } = useUnbanUser()
 
@@ -106,6 +111,13 @@ export default function AdminUsersPage() {
             </TableBody>
           </Table>
         </div>
+      )}
+      {meta && (
+        <PaginationControls
+          page={meta.page}
+          totalPages={meta.totalPages}
+          onPageChange={setPage}
+        />
       )}
     </motion.div>
   )
