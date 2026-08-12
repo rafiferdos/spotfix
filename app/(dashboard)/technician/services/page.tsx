@@ -57,8 +57,11 @@ export default function TechnicianServicesPage() {
   }
 
   const myServices = useMemo(
-    () => allServices?.filter((s) => s.technicianId === user?.id) ?? [],
-    [allServices, user?.id]
+    () =>
+      allServices?.data?.filter(
+        (service) => service.technicianId === user?.id
+      ) ?? [],
+    [allServices, user]
   )
 
   const resetForm = () => {
