@@ -21,10 +21,20 @@ interface ErrorResponse {
   message: string
 }
 
-export const useAdminUsers = () =>
-  useQuery({ queryKey: ["admin", "users"], queryFn: getAllUsers })
-export const useAdminBookings = () =>
-  useQuery({ queryKey: ["admin", "bookings"], queryFn: getAllBookingsAdmin })
+export const useAdminUsers = (page: number, limit = 10) =>
+  useQuery({
+    queryKey: ["admin", "users", page],
+    queryFn: () => getAllUsers(page, limit),
+    placeholderData: (prev) => prev,
+  })
+
+export const useAdminBookings = (page: number, limit = 10) =>
+  useQuery({
+    queryKey: ["admin", "bookings", page],
+    queryFn: () => getAllBookingsAdmin(page, limit),
+    placeholderData: (prev) => prev,
+  })
+
 export const useAdminCategories = () =>
   useQuery({ queryKey: ["admin", "categories"], queryFn: getAdminCategories })
 
