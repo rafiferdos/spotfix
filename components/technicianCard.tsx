@@ -3,22 +3,18 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { TechnicianType } from "@/features/technicians/types"
 import { Briefcase, MapPin } from "lucide-react"
 import Link from "next/link"
+import { UserAvatar } from "./user-avatar"
 
 export function TechnicianCard({ technician }: { technician: TechnicianType }) {
-  const initials = technician.user.name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase()
-
   return (
     <Card className="overflow-hidden">
       <CardHeader>
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-semibold text-primary">
-            {initials}
-          </div>
+          <UserAvatar
+            src={technician.user.profileImage}
+            name={technician.user.name}
+            className="h-12 w-12 text-base"
+          />
           <div className="min-w-0">
             <h3 className="truncate text-base font-medium">
               {technician.user.name}
