@@ -8,11 +8,27 @@ import {
   AdminUser,
   AnalyticsOverview,
   CreateCategoryPayload,
+  PaginationMeta,
 } from "./types"
 
-export const getAllUsers = async (): Promise<AdminUser[]> => {
-  const res = await axiosInstance.get("/admin/users")
-  return res.data.data
+export const getAllUsers = async (
+  page = 1,
+  limit = 10
+): Promise<{ data: AdminUser[]; meta: PaginationMeta }> => {
+  const res = await axiosInstance.get("/admin/users", {
+    params: { page, limit },
+  })
+  return { data: res.data.data, meta: res.data.meta }
+}
+
+export const getAllBookingsAdmin = async (
+  page = 1,
+  limit = 10
+): Promise<{ data: AdminBooking[]; meta: PaginationMeta }> => {
+  const res = await axiosInstance.get("/admin/bookings", {
+    params: { page, limit },
+  })
+  return { data: res.data.data, meta: res.data.meta }
 }
 
 export const banUser = async (id: string): Promise<AdminUser> => {
@@ -21,11 +37,6 @@ export const banUser = async (id: string): Promise<AdminUser> => {
 }
 export const unbanUser = async (id: string): Promise<AdminUser> => {
   const res = await axiosInstance.patch(`/admin/users/${id}/unban`)
-  return res.data.data
-}
-
-export const getAllBookingsAdmin = async (): Promise<AdminBooking[]> => {
-  const res = await axiosInstance.get("/admin/bookings")
   return res.data.data
 }
 
