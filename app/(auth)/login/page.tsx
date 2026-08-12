@@ -15,6 +15,7 @@ import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
+import { GoogleSignInButton } from "@/components/google-sign-in-button"
 import { Reveal, RevealGroup } from "@/components/motion/reveal"
 import { loginAction } from "@/service/auth-actions"
 import { useAuth } from "@/store/use-auth"
@@ -108,6 +109,14 @@ export default function LoginPage() {
                   </Button>
                 </CardFooter>
               </AuthForm>
+              <div className="mt-6 flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <span className="text-xs text-muted-foreground">OR</span>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+              <div className="mt-4">
+                <GoogleSignInButton />
+              </div>
             </CardContent>
             <div className="mt-8 flex justify-center">
               <Button variant="ghost" size="sm">
