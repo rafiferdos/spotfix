@@ -144,7 +144,11 @@ export default function TechnicianServicesPage() {
                   onValueChange={(value) => setCategoryId(value ?? "")}
                 >
                   <SelectTrigger id="svc-category" className="w-full">
-                    <SelectValue placeholder="Select a category" />
+                    <SelectValue placeholder="Select a category">
+                      {categoryId
+                        ? categories?.find((c) => c.id === categoryId)?.name
+                        : undefined}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {categories?.map((cat) => (
