@@ -25,6 +25,9 @@ export const registerSchema = credentialsSchema.extend({
   }),
   phone: z.string().optional(),
   address: z.string().optional(),
+  agreeToTerms: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the Terms & Privacy Policy",
+  }),
 })
 
 export type LoginFormValues = z.infer<typeof loginSchema>
