@@ -2,6 +2,7 @@
 
 import { CustomerBookingCard } from "@/components/customer-booking-card"
 import { PaymentDetailsDialog } from "@/components/payment-details-dialog"
+import { TableSkeleton } from "@/components/skeletons/table-skeleton"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Table,
@@ -112,9 +113,9 @@ function PaymentsTab() {
 
   if (isLoading) {
     return (
-      <div className="flex h-40 items-center justify-center">
-        <Spinner />
-      </div>
+      <>
+        <TableSkeleton rows={5} cols={5} />
+      </>
     )
   }
 
