@@ -1,5 +1,6 @@
 "use client"
 
+import { PaginationControls } from "@/components/pagination-control"
 import { TableSkeleton } from "@/components/skeletons/table-skeleton"
 import {
   Table,
@@ -12,9 +13,13 @@ import {
 import { useAdminBookings } from "@/features/admin/hooks"
 import { AlertCircle } from "lucide-react"
 import { motion } from "motion/react"
+import { useState } from "react"
 
 export default function AdminBookingsPage() {
-  const { data: bookings, isLoading, isError } = useAdminBookings()
+  const [page, setPage] = useState(1)
+  const { data: bookingsResponse, isLoading, isError } = useAdminBookings(page)
+  const meta = bookingsResponse?.meta
+  const bookings = bookingsResponse?.data ?? []
 
   return (
     <motion.div
@@ -79,6 +84,13 @@ export default function AdminBookingsPage() {
             </TableBody>
           </Table>
         </div>
+      )}
+      {meta && (
+        <PaginationControls
+          page={meta.page}
+          totalPages={meta.totalPages}
+          onPageChange={setPage}
+        />
       )}
     </motion.div>
   )
