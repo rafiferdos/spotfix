@@ -80,7 +80,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link href="/" className="flex items-center px-2 py-1">
-          <div className="mx-auto rounded-3xl bg-primary/10 p-7 dark:bg-primary/20">
+          <div className="mx-auto rounded-3xl bg-primary/10 p-7 dark:bg-primary/80">
             <Image
               src={Logo}
               alt="Spotfix Logo"
