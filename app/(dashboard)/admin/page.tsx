@@ -10,10 +10,12 @@ import {
 import { Calendar, FolderKanban, Users } from "lucide-react"
 import { motion } from "motion/react"
 import Link from "next/link"
+import { useState } from "react"
 
 export default function AdminHomePage() {
-  const { data: users, isLoading: usersLoading } = useAdminUsers()
-  const { data: bookings, isLoading: bookingsLoading } = useAdminBookings()
+  const [page, setPage] = useState(1)
+  const { data: users, isLoading: usersLoading } = useAdminUsers(page)
+  const { data: bookings, isLoading: bookingsLoading } = useAdminBookings(page)
   const { data: categories, isLoading: categoriesLoading } =
     useAdminCategories()
 
@@ -28,13 +30,13 @@ export default function AdminHomePage() {
   const stats = [
     {
       title: "People",
-      value: users?.length ?? 0,
+      value: users?.data?.length ?? 0,
       icon: Users,
       href: "/admin/users",
     },
     {
       title: "Bookings",
-      value: bookings?.length ?? 0,
+      value: bookings?.data?.length ?? 0,
       icon: Calendar,
       href: "/admin/bookings",
     },
