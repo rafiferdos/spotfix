@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { UserAvatar } from "@/components/user-avatar"
 import { useAdminUsers, useBanUser, useUnbanUser } from "@/features/admin/hooks"
 import { cn } from "@/lib/utils"
 import { AlertCircle, Ban } from "lucide-react"
@@ -70,7 +71,16 @@ export default function AdminUsersPage() {
             <TableBody>
               {users.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      <UserAvatar
+                        src={user.profileImage}
+                        name={user.name}
+                        className="h-7 w-7 text-xs"
+                      />
+                      {user.name}
+                    </div>
+                  </TableCell>{" "}
                   <TableCell className="text-muted-foreground">
                     {user.email}
                   </TableCell>

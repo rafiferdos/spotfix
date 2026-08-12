@@ -2,6 +2,7 @@ export interface AdminUser {
   id: string
   name: string
   email: string
+  profileImage: string | null
   phone: string | null
   role: "ADMIN" | "CUSTOMER" | "TECHNICIAN"
   status: "ACTIVE" | "BANNED"
